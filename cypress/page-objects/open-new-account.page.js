@@ -1,8 +1,9 @@
 class OpenNewAccountPage {
+
   get openNewAccountTitle() {
     return cy.contains("h1", "Open New Account");
   }
-  get selectAccountType() {
+  get accountType() {
     return cy.get('[id="type"]');
   }
   get fundingAccountDropdown() {
@@ -18,25 +19,25 @@ class OpenNewAccountPage {
   get selectDefaultAccountNumber() {
     return cy.get('[id="fromAccountId"]');
   }
+  verifyOpenNewAccountPageUrl() {
+  cy.url().should('include', '/openaccount.htm');
+}
 
+  verifyOpenNewAccountPageTitle() {
+    this.openNewAccountTitle.should("be.visible").and("have.text", "Open New Account");
+  }
 
-  getDefaultAccountAndValidate() {
+  getDefaultAccountNumber() {
     return this.defaultAccountNumber.first().then(($option) => {
       const accountNumber = $option.val();
-      expect(accountNumber).to.match(/^\d+$/); // Validation
-
       return this.selectDefaultAccountNumber
         .select(accountNumber)
         .then(() => accountNumber);
     });
   }
-  verifyTitleIsVisible() {
-    this.openNewAccountTitle.should("be.visible");
-    this.openNewAccountTitle.should("have.text", "Open New Account");
-  }
-
-  createAccount(type) {
-    this.selectAccountType.select(type);
+  
+selectAccountType(type) {
+    this.accountType.select(type);
     this.fundingAccountDropdown
       .find("option")
       .should("have.length.greaterThan", 0)

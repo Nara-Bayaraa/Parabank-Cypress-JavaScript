@@ -1,6 +1,5 @@
-import RegisterPage from "../../support/page-objects/register.page";
-import HomePage from "../../support/page-objects/home.page";
-import AccountsOverviewPage from "../../support/page-objects/account-overview.page";
+import RegisterPage from "../../page-objects/register.page";
+import HomePage from "../../page-objects/home.page";
 import { generateUserRegistrationData } from "../../support/helpers/generate-data";
 
 describe("User Registration -Positive Test Cases", () => {

@@ -15,11 +15,11 @@ class HomePage {
     return cy.get("div#rightPanel p");
   }
 
-  verifyUrlIsExact() {
+  verifyAccountOverviewPageUrl() {
     cy.url().should("includes", "overview.htm");
   }
   
-  verifyTitleIsVisible() {
+  verifyAccountOverviewPage() {
     cy.title().should("eq", "ParaBank | Accounts Overview");
   }
 

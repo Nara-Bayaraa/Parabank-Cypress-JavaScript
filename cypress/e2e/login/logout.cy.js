@@ -1,8 +1,9 @@
 describe("Logout Functionality", () => {
+  
   let username;
   let password;
 
-  it(" LOGOUT-001] should log out successfully after registration and redirect to login page)", () => {
+  it("[LOGOUT-001] Verify successful logout after registration and redirection to login page", () => {
     cy.visit("/register.htm");
     cy.registerUser().then(() => {
       cy.get("@registeredUser").then((user) => {
@@ -13,7 +14,7 @@ describe("Logout Functionality", () => {
     });
   });
 
-  it("[LOGOUT-002] should log out successfully and redirect to login page", () => {
+  it("[LOGOUT-002] Verify successful logout and redirection to login page", () => {
     cy.visit("/index.htm");
     cy.loginUser(username, password);
     cy.logoutUser();

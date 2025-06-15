@@ -1,6 +1,9 @@
-import RegisterPage from "../support/page-objects/register.page";
-import HomePage from "../support/page-objects/home.page";
+import RegisterPage from "../page-objects/register.page";
+import HomePage from "../page-objects/home.page";
 import { generateUserRegistrationData } from "../support/helpers/generate-data";
+import AccountOpenedConfirmationPage from "../page-objects/account-opened-confirmation.page";
+import AccountServicesMenuPage from "../page-objects/account-services-menu.page";
+import OpenNewAccountPage from "../page-objects/open-new-account.page";
 
 Cypress.Commands.add("registerUser", (overrides = {}) => {
     cy.visit("/register.htm");
@@ -36,7 +39,21 @@ Cypress.Commands.add("logoutUser", () => {
   cy.contains("Log Out").click();
 });
 
+Cypress.Commands.add('getAccountBalances', () => {
+  let balances = {};
+  cy.contains("Balance:").next().invoke("text").then(text => balances.balance = text.trim());
+  cy.contains("Available:").next().invoke("text").then(text => balances.available = text.trim());
+  cy.wrap(balances);
+});
 
+Cypress.Commands.add("selectAccountType", (accountType) => {
+  AccountServicesMenuPage.clickOpenNewAccountLink();
+  OpenNewAccountPage.selectAccountType(accountType);
+  return AccountOpenedConfirmationPage.getAccountNumber().then((accountNumber) => {
+    AccountOpenedConfirmationPage.clickAccountNumber();
+    return cy.wrap(accountNumber);
+  });
+});
 
 
 import "./commands";

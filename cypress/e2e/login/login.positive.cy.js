@@ -1,30 +1,29 @@
-import HomePage from "../../support/page-objects/home.page";
+import HomePage from "../../page-objects/home.page";
 
-describe("Login Functionality - Positive Test Cases ", () => {
+describe("Login Functionality - Positive Test Cases", () => {
+  
   let username;
   let password;
-
+  
+before(()=> {
+   cy.registerUser();
+    cy.get("@registeredUser").then((user) => {
+      username = user.username;
+      password = user.password;
+       cy.logoutUser();
+})
+})
   beforeEach(() => {
     cy.visit("/");
   });
 
-  it("[LOGIN-001] should register a new user with random data", () => {
-    HomePage.clickRegisterLink();
-    cy.registerUser().then(() => {
-      cy.get("@registeredUser").then((user) => {
-        username = user.username;
-        password = user.password;
-      });
-    });
-  });
-
-  it("[LOGIN-002] should  log in successfully after registration with  the valid credentials", () => {
+  it("[LOGIN-001] Verify successful login after registration with valid credentials", () => {
     cy.log(`username ${username}`);
     cy.log(`password ${password}`);
     HomePage.typeUserName(username);
     HomePage.typePassword(password);
     HomePage.clickLoginButton();
-   HomePage.verifyUrlIsExact();
-    HomePage.verifyTitleIsVisible();
+    HomePage.verifyAccountOverviewPageUrl()
+    HomePage.verifyAccountOverviewPage();
   });
 });

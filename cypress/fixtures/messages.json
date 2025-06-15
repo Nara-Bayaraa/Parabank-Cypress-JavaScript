@@ -5,5 +5,6 @@
   "CREDENTIALS_REQUIRED_ERR_MSG": "Please enter a username and password.",
   "USERNAME_AND_PASSWORD_VERIFICATION_ERR_MSG": "The username and password could not be verified.",
   "FIRST_NAME_REQUIRED_MSG": "First name is required",
-  "LAST_NAME_REQUIRED_MSG": "Last name is required."
+  "LAST_NAME_REQUIRED_MSG": "Last name is required.",
+  "ACCOUNT_OPENED_SUCCESS_MSG": "Congratulations, your account is now open."
 }

@@ -1,7 +1,8 @@
-import RegisterPage from "../../support/page-objects/register.page";
+import RegisterPage from "../../page-objects/register.page";
 import { generateUserRegistrationData } from "../../support/helpers/generate-data";
 
-describe("User Registration -Negative Test  Cases", () => {
+describe("User Registration - Negative Test Cases", () => {
+  
   let errorMessage;
   let userData;
 
@@ -21,10 +22,10 @@ describe("User Registration -Negative Test  Cases", () => {
         cy.wrap(user.username).as("username");
       });
     });
-    cy.visit("/register.htm"); 
+    cy.visit("/register.htm");
   });
 
-  it("[REG-001] should not allow registration with an existing username", function () {
+  it("[REG-001] Verify registration is not allowed with an existing username", function () {
     cy.get("@username").then((username) => {
       const registerData = generateUserRegistrationData();
       RegisterPage.typeFirstName(registerData.firstName);
@@ -46,7 +47,7 @@ describe("User Registration -Negative Test  Cases", () => {
     });
   });
 
-  it("[REG-002] should not allow registration when first name is missing", () => {
+  it("[REG-002] Verify registration is not allowed when first name is missing", () => {
     const registerData = generateUserRegistrationData();
     RegisterPage.typeFirstName(userData.invalid_emptyInput); // empty first name
     RegisterPage.typeLastName(registerData.lastName);
@@ -66,7 +67,7 @@ describe("User Registration -Negative Test  Cases", () => {
     );
   });
 
-  it("[REG-003] should not allow registration when last name is missing", () => {
+  it("[REG-003] Verify registration is not allowed when last name is missing", () => {
     const registerData = generateUserRegistrationData();
     RegisterPage.typeFirstName(registerData.firstName);
     RegisterPage.typeLastName(userData.invalid_emptyInput); // empty last name
@@ -86,3 +87,4 @@ describe("User Registration -Negative Test  Cases", () => {
     );
   });
 });
+
