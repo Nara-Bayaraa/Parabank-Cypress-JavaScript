@@ -4,9 +4,8 @@ import AccountDetailsPage from "../../page-objects/account-details.page";
 import OpenNewAccountPage from "../../page-objects/open-new-account.page";
 
 describe("Open New Checking Account Functionality", () => {
-
-  let username;
-  let password;
+  
+  let username, password;
   let message;
 
   before(() => {
@@ -39,32 +38,34 @@ describe("Open New Checking Account Functionality", () => {
   });
 
   it("[CHECKING-002] Verify correct account details and initial transaction are displayed", () => {
-    cy.selectAccountType("CHECKING").then((accountNumber) => {
-      AccountDetailsPage.verifyAccountNumberUrl(accountNumber);
-      AccountDetailsPage.getBalances().then(({ balance, available }) => {
-        AccountDetailsPage.verifyAccountDetails(
-          accountNumber,
-          "CHECKING",
-          balance,
-          available
-        );
-      });
+    cy.selectAccountType("CHECKING").then((checkingAccountNumber) => {
+      cy.log("👋New checking account:", checkingAccountNumber);
+      AccountDetailsPage.verifyAccountNumberUrl(checkingAccountNumber);
+      AccountDetailsPage.getBalancesAndAvailableAmount().then(
+        ({ balance, available }) => {
+          AccountDetailsPage.verifyAccountDetails(
+            checkingAccountNumber,
+            "CHECKING",
+            balance,
+            available
+          );
+        }
+      );
+
+      AccountDetailsPage.getTransactionTableValues(0).then(
+        ({ date, description, debitAmount, creditAmount }) => {
+          AccountDetailsPage.verifyTransaction({
+            shouldExist: true,
+            expectedDate: date,
+            expectedDescription: description,
+            expectedDebitAmount: debitAmount,
+            expectedCreditAmount: creditAmount,
+          });
+          cy.log(`Expected credit amount: ${creditAmount}`);
+        }
+      );
     });
-
-    AccountDetailsPage.getTransactionTableValues(0).then(
-      ({ date, description, debitAmount, creditAmount }) => {
-        AccountDetailsPage.verifyTransaction({
-          shouldExist: true,
-          date,
-          description,
-          creditAmount,
-          amount: debitAmount,
-        });
-        cy.log(`credit amount is ${debitAmount}`);
-      }
-    );
   });
-
   it("[CHECKING-003] Verify filtering transactions by month and type (no debits)", () => {
     cy.selectAccountType("CHECKING");
     AccountDetailsPage.selectFilters("April", "Debit");
@@ -82,10 +83,10 @@ describe("Open New Checking Account Functionality", () => {
       ({ date, description, debitAmount, creditAmount }) => {
         AccountDetailsPage.verifyTransaction({
           shouldExist: true,
-          date,
-          description,
-          creditAmount,
-          amount: debitAmount,
+          expectedDate: date,
+          expectedDescription: description,
+          expectedDebitAmount: debitAmount,
+          expectedCreditAmount: creditAmount,
         });
         cy.log(`credit amount is ${creditAmount}`);
       }

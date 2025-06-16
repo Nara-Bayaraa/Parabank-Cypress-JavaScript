@@ -22,15 +22,22 @@ class AccountsOverviewPage {
   get balanceDisclaimerFootnote() {
     return cy.get('[id="accountTable"] tfoot tr').first().find("td").eq(0);
   }
-  get accountNumberLink() {
-    return cy.get("td a ");
+  get accountNumber() {
+    return cy.get("td a ").eq(0);
+  }
+
+  verifyDefaultAccountNumber(expectedDefaultNumber) {
+    this.accountNumber
+      .should("be.visible", expectedDefaultNumber)
+      .and("have.attr", "href")
+      .and("match", /activity\.htm\?id=\d+/);
   }
 
   verifyAccountOverviewPageTitle() {
     this.accountOverviewTitle.should("be.visible");
   }
 
-  // Check column headers
+  // check column headers
   verifyOverviewTableHeadersDisplayed() {
     this.accountOverviewTable.should("be.visible");
     this.accountHeader.should("be.visible");
@@ -41,26 +48,31 @@ class AccountsOverviewPage {
   }
 
   getAccountNumber() {
-    return this.accountNumberLink.should("be.visible");
+    return this.accountNumber.should("be.visible");
   }
 
   clickAccountNumber() {
-    this.accountNumberLink.click();
+    this.accountNumber.click();
   }
 
-  getAccountOverviewTableRow(rowIndex = 0) {
-    return cy.get('[id="accountTable"] tbody tr').eq(rowIndex);
-  }
-
-  getAccountOverviewTableValues(rowIndex = 0) {
-    return this.getAccountOverviewTableRow(rowIndex)
-      .find("td")
-      .then(($tds) => {
-        const account = $tds.eq(0).find("a").text().trim();
+  getAllAccountOverviewTableValues() {
+    return cy.get('[id="accountTable"] tbody tr').then(($rows) => {
+      const accounts = [];
+      $rows.each((index, row) => {
+        const $tds = Cypress.$(row).find("td");
+        const accountNumber = $tds.eq(0).find("a").text().trim();
         const balance = $tds.eq(1).text().trim();
         const availableAmount = $tds.eq(2).text().trim();
-        return { account, balance, availableAmount };
+        if (accountNumber) {
+          accounts.push({
+            accountNumber,
+            balance,
+            availableAmount,
+          });
+        }
       });
+      return accounts;
+    });
   }
 
   getTotalValue() {
@@ -73,38 +85,70 @@ class AccountsOverviewPage {
       .invoke("text")
       .then((text) => text.trim());
   }
-
   verifyAccountOverviewDetails(
-    expectedAccountNumber,
-    expectedBalance,
-    expectedAvailableAmount,
+    expectedAccounts,
     expectedTotal,
     expectedDisclaimer
   ) {
-    this.accountHeader.should("contain.text", expectedAccountNumber);
-    if (expectedBalance) {
-      this.balanceHeader.should("contain.text", expectedBalance);
-    } else {
-      this.balanceHeader.invoke("text").should("match", /^\$\d+(\.\d{2})?$/);
-    }
-    if (expectedAvailableAmount) {
-      this.availableAmountHeader.should(
-        "contain.text",
-        expectedAvailableAmount
-      );
-    } else {
-      this.availableAmountHeader
-        .invoke("text")
-        .should("match", /^\$\d+(\.\d{2})?$/);
-    }
-    if (expectedTotal) {
-      this.totalRow.should("contain.text", expectedTotal);
-    } else {
-      this.totalRow.invoke("text").should("match", /^\$\d+(\.\d{2})?$/);
-    }
-    if (expectedDisclaimer) {
-      this.balanceDisclaimerFootnote.should("contain.text", expectedDisclaimer);
-    }
+    this.getAllAccountOverviewTableValues().then((actualAccounts) => {
+      // for each expected account, find the match and verify
+      expectedAccounts.forEach((expected, index) => {
+        const actual = actualAccounts.find(
+          (acc) => acc.accountNumber === expected.accountNumber
+        );
+        expect(actual, `Account #${expected.accountNumber} should exist`).to.not
+          .be.undefined;
+
+        if (expected.balance) {
+          expect(
+            actual.balance,
+            `Balance for #${expected.accountNumber}`
+          ).to.equal(expected.balance);
+        }
+        if (expected.availableAmount) {
+          expect(
+            actual.availableAmount,
+            `Available amount for #${expected.accountNumber}`
+          ).to.equal(expected.availableAmount);
+        }
+        // validate format
+        expect(
+          actual.accountNumber,
+          `Account number format for #${expected.accountNumber}`
+        ).to.match(/^\d+$/);
+        expect(
+          actual.balance,
+          `Balance format for #${expected.accountNumber}`
+        ).to.match(/^\$\d+(\.\d{2})?$/);
+        expect(
+          actual.availableAmount,
+          `Available amount format for #${expected.accountNumber}`
+        ).to.match(/^\$\d+(\.\d{2})?$/);
+      });
+
+      this.getTotalValue().then((total) => {
+        expect(total, "Account total value").to.equal(expectedTotal);
+
+        this.getDisclaimer().then((disclaimer) => {
+          expect(disclaimer, "Account table disclaimer").to.equal(
+            expectedDisclaimer
+          );
+          // check the total count of account
+          expect(
+            actualAccounts.length,
+            "Number of displayed accounts"
+          ).to.equal(expectedAccounts.length);
+        });
+      });
+    });
+  }
+
+  findAccountByNumber(accounts, accountNumber) {
+    return accounts.find((a) => a.accountNumber === accountNumber);
+  }
+
+  getAllAccounts() {
+    return this.getAllAccountOverviewTableValues();
   }
 }
 

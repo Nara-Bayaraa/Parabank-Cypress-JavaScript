@@ -4,7 +4,7 @@ import AccountDetailsPage from "../../page-objects/account-details.page";
 import OpenNewAccountPage from "../../page-objects/open-new-account.page";
 
 describe("Open New Savings Account Functionality", () => {
-
+  
   let username;
   let password;
   let message;
@@ -37,11 +37,11 @@ describe("Open New Savings Account Functionality", () => {
   });
 
   it("[SAVINGS-002] Verify correct account details and initial transaction are displayed", () => {
-    cy.selectAccountType("SAVINGS").then((accountNumber) => {
-      AccountDetailsPage.verifyAccountNumberUrl(accountNumber);
-      cy.getAccountBalances().then(({ balance, available }) => {
+    cy.selectAccountType("SAVINGS").then((savingsAccountNumber) => {
+      AccountDetailsPage.verifysavingsAccountNumberUrl(savingsAccountNumber);
+      cy.getBalancesAndAvailableAmount().then(({ balance, available }) => {
         AccountDetailsPage.verifyAccountDetails(
-          accountNumber,
+          savingsAccountNumber,
           "SAVINGS",
           balance,
           available
@@ -52,10 +52,10 @@ describe("Open New Savings Account Functionality", () => {
       ({ date, description, debitAmount, creditAmount }) => {
         AccountDetailsPage.verifyTransaction({
           shouldExist: true,
-          date,
-          description,
-          creditAmount,
-          amount: debitAmount,
+          expectedDate: date,
+          expectedDescription: description,
+          expectedDebitAmount: debitAmount,
+          expectedCreditAmount: creditAmount,
         });
         cy.log(`credit amount is ${creditAmount}`);
       }
@@ -74,15 +74,14 @@ describe("Open New Savings Account Functionality", () => {
     cy.selectAccountType("SAVINGS");
     AccountDetailsPage.selectFilters("June", "Credit");
     AccountDetailsPage.clickGoButton();
-    
+
     AccountDetailsPage.getTransactionTableValues(0).then(
       ({ date, description, debitAmount, creditAmount }) => {
         AccountDetailsPage.verifyTransaction({
-          shouldExist: true,
-          date,
-          description,
-          creditAmount,
-          amount: debitAmount,
+          expectedDate: date,
+          expectedDescription: description,
+          expectedDebitAmount: debitAmount,
+          expectedCreditAmount: creditAmount,
         });
         cy.log(`credit amount is ${creditAmount}`);
       }

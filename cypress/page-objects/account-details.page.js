@@ -3,7 +3,7 @@ class AccountDetailsPage {
     return cy.xpath("//h1[text()='Account Details']");
   }
   get accountNumber() {
-    return cy.contains("Account Number:").next();
+    return cy.get("#accountId");
   }
   get accountType() {
     return cy.contains("Account Type:").next();
@@ -38,8 +38,11 @@ class AccountDetailsPage {
   get noTransactionsFoundText() {
     return cy.get('[id="noTransactions"]');
   }
+  getAccountNumber() {
+    this.accountNumber.invoke("text").then((text) => text.trim());
+  }
 
-  getBalances() {
+  getBalancesAndAvailableAmount() {
     return cy
       .contains("Balance:")
       .next()
@@ -58,12 +61,17 @@ class AccountDetailsPage {
       });
   }
 
-  verifyAccountDetails(expectedAccountNumber, expectedAccountType, expectedBalance = null, expectedAvailable = null) {
+  verifyAccountDetails(
+    expectedAccountNumber,
+    expectedAccountType,
+    expectedBalance = null,
+    expectedAvailable = null
+  ) {
     this.accountDetailsTitle.should("be.visible");
     this.accountNumber.should("contain.text", expectedAccountNumber);
     this.accountType.should("contain.text", expectedAccountType);
     //balance
-    if (expectedBalance!== null) {
+    if (expectedBalance !== null) {
       this.accountBalance.should("contain.text", expectedBalance);
     } else {
       this.accountBalance.invoke("text").should("match", /^\$\d+(\.\d{2})?$/);
@@ -108,7 +116,8 @@ class AccountDetailsPage {
   }) {
     if (shouldExist) {
       this.transactionTable.contains(expectedDescription).should("exist");
-      if (amount) this.transactionTable.contains(expectedAmount).should("exist");
+      if (amount)
+        this.transactionTable.contains(expectedAmount).should("exist");
     } else {
       this.noTransactionsFoundText.should("be.visible");
     }
@@ -127,21 +136,22 @@ class AccountDetailsPage {
         .eq(rowIndex)
         .within(() => {
           // Date
-          if (expectedDate) cy.get("td").eq(0).should("contain.text", expectedDate);
+          if (expectedDate)
+            cy.get("td").eq(0).should("contain.text", expectedDate);
           // Description
           if (expectedDescription)
             cy.get("td").eq(1).should("contain.text", expectedDescription);
           // Debit Amount
-          if (expectedCreditAmount && expectedDebitAmount.trim() !== "") {
+          if (expectedCreditAmount || expectedDebitAmount.trim() !== "") {
             cy.get("td").eq(2).should("contain.text", expectedDebitAmount);
           } else {
-            cy.get("td").eq(2).should("have.text", "").and("be.empty");
+            cy.get("td").eq(2).should("be.empty");
           }
           // Credit Amount
-          if (expectedCreditAmount && expectedDebitAmount.trim() !== "") {
+          if (expectedDebitAmount || expectedCreditAmount.trim() !== "") {
             cy.get("td").eq(3).should("contain.text", expectedCreditAmount);
           } else {
-            cy.get("td").eq(3).should("have.text", "").and("be.empty");
+            cy.get("td").eq(3).should("be.empty");
           }
         });
     } else {

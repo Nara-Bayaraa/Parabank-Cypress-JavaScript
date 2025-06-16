@@ -33,8 +33,12 @@ get logoutButton() {
     this.logoutButton.click();
   }
 
-    clickOpenNewAccountLink() {
+  clickOpenNewAccountLink() {
     this.openNewAccountLink.click();
+  }
+
+  clickAccountOverviewLink(){
+    this.accountsOverviewLink.click();
   }
 }
 export default  new  AccountServicesMenuPage();

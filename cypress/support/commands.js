@@ -4,6 +4,8 @@ import { generateUserRegistrationData } from "../support/helpers/generate-data";
 import AccountOpenedConfirmationPage from "../page-objects/account-opened-confirmation.page";
 import AccountServicesMenuPage from "../page-objects/account-services-menu.page";
 import OpenNewAccountPage from "../page-objects/open-new-account.page";
+import AccountDetailsPage from "../page-objects/account-details.page";
+
 
 Cypress.Commands.add("registerUser", (overrides = {}) => {
     cy.visit("/register.htm");
@@ -46,14 +48,19 @@ Cypress.Commands.add('getAccountBalances', () => {
   cy.wrap(balances);
 });
 
+
 Cypress.Commands.add("selectAccountType", (accountType) => {
   AccountServicesMenuPage.clickOpenNewAccountLink();
   OpenNewAccountPage.selectAccountType(accountType);
-  return AccountOpenedConfirmationPage.getAccountNumber().then((accountNumber) => {
-    AccountOpenedConfirmationPage.clickAccountNumber();
-    return cy.wrap(accountNumber);
-  });
+  AccountOpenedConfirmationPage.clickAccountNumberLink();
+cy.wait(1000)
+return AccountDetailsPage.getAccountNumber();
+});
+
+Cypress.Commands.add("parseBalance", (balanceStr) => {
+  return parseFloat(balanceStr.replace(/[^0-9.-]+/g, ""));
 });
 
 
 import "./commands";
+

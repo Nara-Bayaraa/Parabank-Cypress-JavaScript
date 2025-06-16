@@ -36,12 +36,8 @@ class AccountOpenedConfirmationPage {
     this.verifyAccountOpenMessage(successMessage);
     this.accountNumberLink.should("be.visible");
   }
-
-  getAccountNumber() {
-    return this.accountNumberLink.invoke("text");
-  }
-
-  clickAccountNumber() {
+  
+  clickAccountNumberLink() {
     this.accountNumberLink.click();
   }
 }
