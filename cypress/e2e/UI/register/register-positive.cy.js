@@ -1,6 +1,6 @@
-import RegisterPage from "../../page-objects/register.page";
-import HomePage from "../../page-objects/home.page";
-import { generateUserRegistrationData } from "../../support/helpers/generate-data";
+import RegisterPage from "../../../page-objects/register.page";
+import HomePage from "../../../page-objects/home.page";
+import { generateUserRegistrationData } from "../../../support/helpers/generate-data";
 
 describe("User Registration -Positive Test Cases", () => {
 

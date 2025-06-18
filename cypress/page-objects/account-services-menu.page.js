@@ -37,6 +37,10 @@ get logoutButton() {
     this.openNewAccountLink.click();
   }
 
+  clickTransferFundsLink(){
+    this.transferFundsLink.click();
+  }
+
   clickAccountOverviewLink(){
     this.accountsOverviewLink.click();
   }

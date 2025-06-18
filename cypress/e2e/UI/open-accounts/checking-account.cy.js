@@ -1,7 +1,7 @@
-import AccountOpenedConfirmationPage from "../../page-objects/account-opened-confirmation.page";
-import AccountServicesMenuPage from "../../page-objects/account-services-menu.page";
-import AccountDetailsPage from "../../page-objects/account-details.page";
-import OpenNewAccountPage from "../../page-objects/open-new-account.page";
+import AccountOpenedConfirmationPage from "../../../page-objects/account-opened-confirmation.page";
+import AccountServicesMenuPage from "../../../page-objects/account-services-menu.page";
+import AccountDetailsPage from "../../../page-objects/account-details.page";
+import OpenNewAccountPage from "../../../page-objects/open-new-account.page";
 
 describe("Open New Checking Account Functionality", () => {
   

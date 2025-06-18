@@ -57,8 +57,18 @@ cy.wait(1000)
 return AccountDetailsPage.getAccountNumber();
 });
 
-Cypress.Commands.add("parseBalance", (balanceStr) => {
-  return parseFloat(balanceStr.replace(/[^0-9.-]+/g, ""));
+Cypress.Commands.add("parseValue", (valueStr) => {
+  return parseFloat(valueStr.replace(/[^0-9.-]+/g, ""));
+});
+
+Cypress.Commands.add('buildExpectedAccount', (account, balance, availableAmount) => {
+  return [
+    {
+      accountNumber: account.accountNumber,
+      balance: `$${balance.toFixed(2)}`,
+      availableAmount: `$${availableAmount.toFixed(2)}`,
+    },
+  ];
 });
 
 

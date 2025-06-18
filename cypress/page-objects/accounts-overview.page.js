@@ -74,22 +74,18 @@ class AccountsOverviewPage {
       return accounts;
     });
   }
-
   getTotalValue() {
     return this.totalRow.invoke("text").then((text) => text.trim());
   }
-
   getDisclaimer() {
     return cy
       .get('[id="accountTable"] tfoot td')
       .invoke("text")
       .then((text) => text.trim());
   }
-  verifyAccountOverviewDetails(
-    expectedAccounts,
-    expectedTotal,
-    expectedDisclaimer
-  ) {
+
+
+  verifyAccountOverviewDetails(expectedAccounts, expectedTotal, expectedDisclaimer) {
     this.getAllAccountOverviewTableValues().then((actualAccounts) => {
       // for each expected account, find the match and verify
       expectedAccounts.forEach((expected, index) => {

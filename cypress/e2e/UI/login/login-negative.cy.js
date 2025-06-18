@@ -1,4 +1,4 @@
-import HomePage from "../../page-objects/home.page";
+import HomePage from "../../../page-objects/home.page";
 
 describe("Login Functionality - Negative Test Cases", () => {
   
