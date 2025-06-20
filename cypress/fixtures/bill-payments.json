@@ -1,0 +1,10 @@
+{
+  "payeeName": "tester",
+  "address": "123 Street",
+  "city": "Chicago",
+  "state": "IL",
+  "zipCode": "60647",
+  "phone": "200-300-4000",
+  "toAccNumber": "500",
+  "amount": "10"
+}

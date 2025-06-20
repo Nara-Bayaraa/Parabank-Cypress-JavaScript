@@ -2,7 +2,7 @@ import { faker } from "@faker-js/faker";
 
 export const generateUserRegistrationData = () => {
   const password = faker.internet.password();
-const unique = `${faker.person.firstName().toLowerCase()}${faker.string.alphanumeric(4)}`;
+const unique = `${faker.person.firstName().toLowerCase()}${faker.string.alphanumeric(5)}`;
 
   return {
     firstName: faker.person.firstName(),
@@ -18,3 +18,21 @@ const unique = `${faker.person.firstName().toLowerCase()}${faker.string.alphanum
     confirmPassword: password, 
   };
 };
+
+
+export function generateBillPaymentsData() {
+const accountNumber = faker.number.int({ min: 10000, max: 99999 });
+  const amount = faker.number.int({ min: 10, max: 50 }); // Generates integer between 10-50
+
+  return {
+    payeeName: faker.person.firstName(),
+    address: faker.location.streetAddress(),
+    city: faker.location.city(),
+    state: faker.location.state({ abbreviated: true }),
+    zipCode: faker.location.zipCode(),
+    phoneNumber: faker.phone.number("###-###-####"),
+    accountNumber,
+    verifyAccountNumber: accountNumber,
+    amount
+  };
+}

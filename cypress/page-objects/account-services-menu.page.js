@@ -44,5 +44,9 @@ get logoutButton() {
   clickAccountOverviewLink(){
     this.accountsOverviewLink.click();
   }
+
+  clickPayBillLink(){
+    this.billPayLink.click();
+  }
 }
 export default  new  AccountServicesMenuPage();

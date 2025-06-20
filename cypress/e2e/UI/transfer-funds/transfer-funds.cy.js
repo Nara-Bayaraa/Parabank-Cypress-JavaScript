@@ -4,10 +4,9 @@ import AccountServicesMenuPage from "../../../page-objects/account-services-menu
 import { parseValue } from "../../../support/helpers/data-formatters";
 
 describe("Account and Transfer Workflow", () => {
-
   let amount = "50.00";
   let username, password;
-;
+  let message;
   before(() => {
     cy.registerUser();
     cy.get("@registeredUser").then((user) => {
@@ -19,9 +18,12 @@ describe("Account and Transfer Workflow", () => {
 
   beforeEach(() => {
     cy.loginUser(username, password);
+    cy.fixture("messages.json").then((data) => {
+      message = data;
+    });
   });
 
-  it(" [TRANSFER-001]Verify transferring balance $ to existing account", () => {
+  it(" [TRANSFER-001] Verify transferring money to existing account and sees a confirmation", () => {
     cy.selectAccountType("CHECKING");
     AccountServicesMenuPage.clickAccountOverviewLink();
     // Get initial balances for both accounts
@@ -42,7 +44,8 @@ describe("Account and Transfer Workflow", () => {
       TransferFundsPage.selectToAccount(checkingAccountNum);
       TransferFundsPage.clickTransferButton();
       TransferFundsPage.verifyTransferConfirmation({
-        amountEntering: amount,
+        expectedMessage: message.TRANSFER_COMFIRMATION,
+        enteringAmount: amount,
         fromAccount: defaultAccountNum,
         toAccount: checkingAccountNum,
       });
@@ -66,8 +69,12 @@ describe("Account and Transfer Workflow", () => {
         );
 
         //check total
-        AccountsOverviewPage.getTotalValue().then((expectedTotal) => {
-          AccountsOverviewPage.verifyAccountOverviewDetails(expectedTotal);
+        const finalDefaultBalance = parseValue(updatedDefault.balance);
+        const finalCheckingBalance = parseValue(updatedChecking.balance);
+        const expectedTotal = "$" + (finalDefaultBalance + finalCheckingBalance).toFixed(2);
+
+        AccountsOverviewPage.getTotalValue().then((actualTotal) => {
+          expect(actualTotal).to.equal(expectedTotal);
         });
       });
     });

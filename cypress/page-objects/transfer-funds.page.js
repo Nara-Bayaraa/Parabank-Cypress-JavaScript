@@ -53,31 +53,9 @@ verifyTransferFundsTitleIsVisible(){
     this.transferButton.click();
   }
 
-  selectFromAccountByIndex(index = 0) {
-  return  this.fromAccountDropdown
-      .find("option")
-      .eq(index)
-      .invoke("val")
-      .then((accountNumber) => {
-        this.selectFromAccount(accountNumber)
-      return cy.wrap(accountNumber);
-      });
-  }
-
-  selectToAccountByIndex(index = 0) {
-  return  this.toAccountDropdown
-      .find("option")
-      .eq(index)
-      .invoke("val")
-      .then((accountNumber) => {
-        this.selectToAccount(accountNumber);
-        return cy.wrap(accountNumber);
-      });
-  }
-  
- verifyTransferConfirmation({ amountEntering, fromAccount, toAccount }) {
-    this.confirmationMessageTitle.should('have.text', 'Transfer Complete!');
-    this.amountResult.should('have.text', `$${amountEntering}`);
+ verifyTransferConfirmation({ expectedMessage, enteringAmount, fromAccount, toAccount }) {
+    this.confirmationMessageTitle.should('have.text', expectedMessage);
+    this.amountResult.should('have.text', `$${enteringAmount}`);
     this.fromAccountIdResult.should('have.text', fromAccount);
     this.toAccountIdResult.should('have.text', toAccount);
     cy.contains('See Account Activity for more details.').should('be.visible');

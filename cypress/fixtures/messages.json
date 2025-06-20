@@ -7,5 +7,6 @@
   "FIRST_NAME_REQUIRED_MSG": "First name is required",
   "LAST_NAME_REQUIRED_MSG": "Last name is required.",
   "ACCOUNT_OPENED_SUCCESS_MSG": "Congratulations, your account is now open.",
-  "TRANSFER_COMFIRMATION": "Transfer Complete!"
+  "TRANSFER_COMFIRMATION": "Transfer Complete!",
+  "BILL_PAYMENT_CONFIRMATION": "Bill Payment Complete"
 }
