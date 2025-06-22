@@ -1,10 +1,9 @@
-import AccountOpenedConfirmationPage from "../../page-objects/account-opened-confirmation.page";
-import AccountServicesMenuPage from "../../page-objects/account-services-menu.page";
-import AccountDetailsPage from "../../page-objects/account-details.page";
-import OpenNewAccountPage from "../../page-objects/open-new-account.page";
+import AccountOpenedConfirmationPage from "../../../page-objects/account-opened-confirmation.page";
+import AccountServicesMenuPage from "../../../page-objects/account-services-menu.page";
+import AccountDetailsPage from "../../../page-objects/account-details.page";
+import OpenNewAccountPage from "../../../page-objects/open-new-account.page";
 
 describe("Open New Savings Account Functionality", () => {
-  
   let username;
   let password;
   let message;
@@ -38,15 +37,18 @@ describe("Open New Savings Account Functionality", () => {
 
   it("[SAVINGS-002] Verify correct account details and initial transaction are displayed", () => {
     cy.selectAccountType("SAVINGS").then((savingsAccountNumber) => {
-      AccountDetailsPage.verifysavingsAccountNumberUrl(savingsAccountNumber);
-      cy.getBalancesAndAvailableAmount().then(({ balance, available }) => {
-        AccountDetailsPage.verifyAccountDetails(
-          savingsAccountNumber,
-          "SAVINGS",
-          balance,
-          available
-        );
-      });
+      cy.log("👋New Saving account:", savingsAccountNumber);
+      AccountDetailsPage.verifyAccountNumberUrl(savingsAccountNumber);
+      AccountDetailsPage.getBalancesAndAvailableAmount().then(
+        ({ balance, available }) => {
+          AccountDetailsPage.verifyAccountDetails(
+            savingsAccountNumber,
+            "SAVINGS",
+            balance,
+            available
+          );
+        }
+      );
     });
     AccountDetailsPage.getTransactionTableValues(0).then(
       ({ date, description, debitAmount, creditAmount }) => {

@@ -1,0 +1,38 @@
+
+{
+
+  "USERNAME_ALREADY_EXIST_MSG": "This username already exists.",
+  "CREDENTIALS_REQUIRED_ERR_MSG": "Please enter a username and password.",
+  "USERNAME_AND_PASSWORD_VERIFICATION_ERR_MSG": "The username and password could not be verified.",
+ "FIRST_NAME_REQUIRED_MSG": "First name is required.",
+  "LAST_NAME_REQUIRED_MSG": "Last name is required.",
+
+"REGISTER_FORM_FIELDS":[
+"First name is required.",
+"Last name is required.",
+"Address is required.",
+"City is required.",
+"State is required.",
+"Zip Code is required.",
+"Social Security Number is required.",
+"Username is required.",
+"Password is required.",
+"Password confirmation is required."
+],
+ 
+  "BILL_PAYMENT_FORM_FIELDS": [
+    "Payee name is required.",
+    "Address is required.",
+    "City is required.",
+    "State is required.",
+    "Zip Code is required.",
+    "Phone number is required.",
+    "Account number is required.",
+    "Account number is required.",
+    "The amount cannot be empty."
+  ],
+  "INVALID_NUMBER": "Please enter a valid number.",
+  "ACCOUNT_MISMATCH": "The account numbers do not match.",
+  "amountZeroOrNegative": "Amount must be greater than zero",
+  "insufficientFunds": "Insufficient funds"
+}

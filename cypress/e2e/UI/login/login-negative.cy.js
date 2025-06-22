@@ -23,7 +23,7 @@ describe("Login Functionality - Negative Test Cases", () => {
   });
 
   it("[LOGIN-001] Verify an error message is displayed when logging in with an empty username", () => {
-    HomePage.loginUser(userData.invalid_emptyUsername, validPassword);
+    cy.loginUser(userData.invalid_emptyUsername, validPassword);
     HomePage.verifyCredentialsErrorMessageIsVisible(
       errorMessage.CREDENTIALS_REQUIRED_ERR_MSG
     );

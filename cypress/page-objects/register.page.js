@@ -56,7 +56,9 @@ class RegisterPage {
   get welcomeMessageText() {
    return cy.get('div#leftPanel b')
   }
-  
+get allRegisterFieldsErrorMessages() {return cy.get('[class="error"]')}
+
+
   typeFirstName(firstName) {
     if (firstName && firstName.length > 0) {
       this.firstNameInputField.type(firstName);
@@ -167,6 +169,12 @@ class RegisterPage {
   verifyAccountSuccessfullyCreatedMessageIsVisible(expectedText) {
     this.successfullyRegisterText.should("be.visible", expectedText);
   }
-  
+   verifyErrorMessages(expectedMessages){
+    this.allRegisterFieldsErrorMessages
+    .should('have.length', expectedMessages.length)
+    .each(($el, index) => {
+       expect($el.text().trim()).to.equal(expectedMessages[index]);
+    })
+   }
 }
 export default new RegisterPage();

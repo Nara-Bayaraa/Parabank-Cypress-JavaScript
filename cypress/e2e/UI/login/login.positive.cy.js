@@ -1,4 +1,4 @@
-import HomePage from "../../page-objects/home.page";
+import HomePage from "../../../page-objects/home.page";
 
 describe("Login Functionality - Positive Test Cases", () => {
   
@@ -7,6 +7,7 @@ describe("Login Functionality - Positive Test Cases", () => {
   
 before(()=> {
    cy.registerUser();
+    cy.registerUserWithRetry(3);
     cy.get("@registeredUser").then((user) => {
       username = user.username;
       password = user.password;

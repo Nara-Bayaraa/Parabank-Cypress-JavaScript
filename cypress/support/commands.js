@@ -71,6 +71,26 @@ Cypress.Commands.add('buildExpectedAccount', (account, balance, availableAmount)
   ];
 });
 
+// username retry
+Cypress.Commands.add('registerUserWithRetry', (maxRetries = 5) => {
+  let tries = 0;
+
+  function tryRegister() {
+    const userData = generateUserRegistrationData();
+    cy.registerUser(userData);
+
+    // Check if error message appears
+    cy.get('body').then($body => {
+      if ($body.text().includes('This username already exists') && tries < maxRetries) {
+        tries++;
+        tryRegister(); // Try again with a new user
+      } else {
+        cy.wrap(userData).as('registeredUser');
+      }
+    });
+  }
+  tryRegister();
+});
 
 import "./commands";
 

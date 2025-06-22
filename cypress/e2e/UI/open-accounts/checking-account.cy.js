@@ -39,7 +39,7 @@ describe("Open New Checking Account Functionality", () => {
 
   it("[CHECKING-002] Verify correct account details and initial transaction are displayed", () => {
     cy.selectAccountType("CHECKING").then((checkingAccountNumber) => {
-      cy.log("👋New checking account:", checkingAccountNumber);
+      cy.log("👋New Checking account:", checkingAccountNumber);
       AccountDetailsPage.verifyAccountNumberUrl(checkingAccountNumber);
       AccountDetailsPage.getBalancesAndAvailableAmount().then(
         ({ balance, available }) => {

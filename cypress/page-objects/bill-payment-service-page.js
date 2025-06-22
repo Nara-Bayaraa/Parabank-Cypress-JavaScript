@@ -56,6 +56,11 @@ class BillPayServicePage {
     );
   }
 
+  get accountNumberMismatch() {return cy.get('[id="validationModel-verifyAccount-mismatch"]')}
+get accountNumberInvalid() {return cy.contains('Please enter a valid number.')}
+  get allFieldsErrorMessages() {
+    return cy.get('[class="error"]').filter(':visible')
+  }
   verifyBillPaymentServiceTitleIsVisible() {
     this.billPayServicePageTitle.should("be.visible");
   }
@@ -77,12 +82,13 @@ class BillPayServicePage {
   }
 
   typeCity(city) {
-    return city ? this.cityInput.clear().type(city) 
-    : this.cityInput.clear();
+    return city ? this.cityInput.clear().type(city) : this.cityInput.clear();
   }
 
   typeState(state) {
-    return state ? this.stateInput.clear().type(state) : this.stateInput.clear();
+    return state
+      ? this.stateInput.clear().type(state)
+      : this.stateInput.clear();
   }
 
   typeZipCode(zipCode) {
@@ -151,5 +157,21 @@ class BillPayServicePage {
     this.amountResult.should("have.text", `$${amount}`);
     this.accountActivityMessage.should("be.visible");
   }
+
+  verifyErrorMessages(expectedMessages) {
+  this.allFieldsErrorMessages
+      .should("have.length", expectedMessages.length)
+      .each(($el, index) => {
+        expect($el.text().trim()).to.equal(expectedMessages[index]);
+      });
+  }
+
+verifyMismatchErrorIsVisible(expectedMessage){
+    this.accountNumberMismatch.should('be.visible', expectedMessage)
+  }
+  verifyAccountNumberInvalidErrorIsVisible(){
+    this.accountNumberInvalid.should('be.visible')
+  }
+
 }
 export default new BillPayServicePage();

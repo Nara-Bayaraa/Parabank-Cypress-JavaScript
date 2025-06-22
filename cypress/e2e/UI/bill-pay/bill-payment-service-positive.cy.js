@@ -2,8 +2,7 @@ import AccountServicesMenuPage from "../../../page-objects/account-services-menu
 import BillPaymentServicePage from "../../../page-objects/bill-payment-service-page";
 import { generateBillPaymentsData } from "../../../support/helpers/generate-data";
 
-describe('Bill Payment Service', () => {
-
+describe("Bill Payment Functionality Positive Test Cases", () => {
   let fromAccount;
   let message;
   let username, password;
@@ -24,7 +23,7 @@ describe('Bill Payment Service', () => {
     });
   });
 
-  it('[PAYMENT-001] Verify paying bill to recipient account and sees a confirmation', () => {
+  it("[PAYMENT-001] Verify paying bill to recipient account and sees a confirmation", () => {
     AccountServicesMenuPage.clickPayBillLink();
     BillPaymentServicePage.verifyBillPaymentServiceTitleIsVisible();
 
@@ -36,7 +35,9 @@ describe('Bill Payment Service', () => {
     BillPaymentServicePage.typeZipCode(billPayData.zipCode);
     BillPaymentServicePage.typePhoneNumber(billPayData.phoneNumber);
     BillPaymentServicePage.typeAccountNumber(billPayData.accountNumber);
-    BillPaymentServicePage.typeVerifyAccountNumber(billPayData.verifyAccountNumber);
+    BillPaymentServicePage.typeVerifyAccountNumber(
+      billPayData.verifyAccountNumber
+    );
     BillPaymentServicePage.typeAmount(billPayData.amount);
 
     BillPaymentServicePage.selectFromAccountByIndex(0).then((toAcc) => {
@@ -52,4 +53,3 @@ describe('Bill Payment Service', () => {
     });
   });
 });
-

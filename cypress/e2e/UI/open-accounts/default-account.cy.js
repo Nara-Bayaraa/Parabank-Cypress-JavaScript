@@ -1,4 +1,4 @@
-import AccountsOverviewPage from "../../page-objects/accounts-overview.page";
+import AccountsOverviewPage from "../../../page-objects/accounts-overview.page";
 
 describe("Open New Default Account Functionality", () => {
 
