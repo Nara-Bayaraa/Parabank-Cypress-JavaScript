@@ -22,7 +22,6 @@ Cypress.Commands.add("registerUser", (overrides = {}) => {
   RegisterPage.typePassword(registerData.password);
   RegisterPage.typeConfirmPassword(registerData.confirmPassword);
   RegisterPage.clickRegisterButton();
-cy.contains('Your account was created successfully. You are now logged in.').should('be.visible')
   cy.wrap(registerData).as("registeredUser");
    
 });
@@ -57,35 +56,23 @@ cy.wait(1000)
 return AccountDetailsPage.getAccountNumber();
 });
 
-Cypress.Commands.add("parseValue", (valueStr) => {
-  return parseFloat(valueStr.replace(/[^0-9.-]+/g, ""));
-});
 
-Cypress.Commands.add('buildExpectedAccount', (account, balance, availableAmount) => {
-  return [
-    {
-      accountNumber: account.accountNumber,
-      balance: `$${balance.toFixed(2)}`,
-      availableAmount: `$${availableAmount.toFixed(2)}`,
-    },
-  ];
-});
 
-// username retry
-Cypress.Commands.add('registerUserWithRetry', (maxRetries = 5) => {
+// retries logic on username conflict.
+Cypress.Commands.add('registerUserWithRetry', (maxRetries = 3) => {
   let tries = 0;
-
   function tryRegister() {
     const userData = generateUserRegistrationData();
     cy.registerUser(userData);
 
-    // Check if error message appears
-    cy.get('body').then($body => {
-      if ($body.text().includes('This username already exists') && tries < maxRetries) {
-        tries++;
-        tryRegister(); // Try again with a new user
-      } else {
+    cy.get('body', { timeout: 5000 }).then($body => {
+      const text = $body.text();
+      if (text.includes('Your account was created successfully. You are now logged in.')) {
         cy.wrap(userData).as('registeredUser');
+      } else if (text.includes('This username already exists') && tries < maxRetries) {
+        tries++;
+        cy.log(`Retrying registration with new user. Attempt #${tries + 1}`);
+        tryRegister(); 
       }
     });
   }

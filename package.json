@@ -8,7 +8,7 @@
     "cy:run": "cypress run --browser chrome"
   },
   "keywords": [],
-  "author": "",
+  "author": "Narmandakh Bayaraa",
   "license": "ISC",
   "description": "",
   "devDependencies": {

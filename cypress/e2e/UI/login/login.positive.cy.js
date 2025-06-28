@@ -1,13 +1,14 @@
 import HomePage from "../../../page-objects/home.page";
 
 describe("Login Functionality - Positive Test Cases", () => {
-  
+
   let username;
   let password;
   
 before(()=> {
-   cy.registerUser();
+
     cy.registerUserWithRetry(3);
+    
     cy.get("@registeredUser").then((user) => {
       username = user.username;
       password = user.password;
@@ -27,4 +28,5 @@ before(()=> {
     HomePage.verifyAccountOverviewPageUrl()
     HomePage.verifyAccountOverviewPage();
   });
-});
+  });
+

@@ -2,8 +2,8 @@ import { faker } from "@faker-js/faker";
 
 export const generateUserRegistrationData = () => {
   const password = faker.internet.password(); 
-  const unique = `${faker.person.firstName().toLowerCase()}_${faker.string.uuid().slice(0, 8)}`;
-
+  //const unique = `${faker.person.firstName().toLowerCase()}_${faker.string.uuid().slice(0, 8)}`;
+ const unique = `${faker.person.firstName()}_${Date.now()}`;
   return {
     firstName: faker.person.firstName(),
     lastName: faker.person.lastName(),
@@ -13,7 +13,7 @@ export const generateUserRegistrationData = () => {
     zipCode: faker.location.zipCode(),
     phone: faker.phone.number("###-###-####"),
     ssn: faker.string.numeric(9),
-    username: unique,
+    username: ` ${unique}`,
     password,
     confirmPassword: password, 
   };
