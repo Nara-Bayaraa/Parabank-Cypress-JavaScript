@@ -26,6 +26,10 @@ class AccountsOverviewPage {
     return cy.get("td a ").eq(0);
   }
 
+   get firstAccountLink() {
+    return cy.get('#accountTable tbody tr:first-child td a');
+  }
+
   verifyDefaultAccountNumber(expectedDefaultNumber) {
     this.accountNumber
       .should("be.visible", expectedDefaultNumber)
@@ -145,6 +149,10 @@ class AccountsOverviewPage {
 
   getAllAccounts() {
     return this.getAllAccountOverviewTableValues();
+  }
+
+  clickFirstAccountLink(){
+    this.firstAccountLink.click();
   }
 }
 

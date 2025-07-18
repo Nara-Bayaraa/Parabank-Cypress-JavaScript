@@ -27,8 +27,8 @@ Cypress.Commands.add("registerUser", (overrides = {}) => {
 });
 
 Cypress.Commands.add("loginUser", (username, password) => {
-      cy.visit("/index.htm");
-    cy.wait(1000);
+//cy.visit("/index.htm");
+    cy.wait(1500);
   HomePage.typeUserName(username);
   HomePage.typePassword(password);
   HomePage.clickLoginButton();
@@ -59,7 +59,7 @@ return AccountDetailsPage.getAccountNumber();
 
 
 // retries logic on username conflict.
-Cypress.Commands.add('registerUserWithRetry', (maxRetries = 3) => {
+Cypress.Commands.add('registerUserWithRetry', (maxRetries = 5) => {
   let tries = 0;
   function tryRegister() {
     const userData = generateUserRegistrationData();

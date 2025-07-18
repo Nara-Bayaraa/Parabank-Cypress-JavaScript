@@ -38,6 +38,12 @@ class AccountDetailsPage {
   get noTransactionsFoundText() {
     return cy.get('[id="noTransactions"]');
   }
+
+   get transactionRows() { 
+    return cy.get('#transactionTable tbody tr'); 
+  }
+
+
   getAccountNumber() {
     this.accountNumber.invoke("text").then((text) => text.trim());
   }
@@ -165,6 +171,20 @@ class AccountDetailsPage {
 
   verifyAccountNumberUrl(expectedAccountNumber) {
     cy.url().should("include", `/activity.htm?id=${expectedAccountNumber}`);
+  }
+
+
+  // Return a Cypress chainable of all dates as an array
+  getAllDates() {
+    return this.transactionRows
+      .then(($rows) => {
+        const dates = [];
+        $rows.each((i, row) => {
+          const date = Cypress.$(row).find('td').eq(0).text().trim();
+          dates.push(date);
+        });
+        return dates;
+      });
   }
 }
 export default new AccountDetailsPage();

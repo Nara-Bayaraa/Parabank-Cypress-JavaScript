@@ -7,7 +7,7 @@ describe('Account Overview & New Account Funding', () => {
   let username, password;
 
   before(() => {
-    cy.registerUser();
+ cy.registerUserWithRetry(5);
     cy.get("@registeredUser").then((user) => {
       username = user.username;
       password = user.password;

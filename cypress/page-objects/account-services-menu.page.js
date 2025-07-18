@@ -17,7 +17,7 @@ get accountServicesTitle() {
 
   }
   get findTransactionsLink() {
-    return cy.contains('a', 'Find Transactions');
+    return cy.get("a[href='findtrans.htm']")
   }
   get updateContactInfoLink() {
     return cy.contains('a', 'Update Contact Info');
@@ -47,6 +47,10 @@ get logoutButton() {
 
   clickPayBillLink(){
     this.billPayLink.click();
+  }
+
+  clickFindTransactionsLink(){
+    this.findTransactionsLink.click();
   }
 }
 export default  new  AccountServicesMenuPage();
