@@ -52,5 +52,9 @@ get logoutButton() {
   clickFindTransactionsLink(){
     this.findTransactionsLink.click();
   }
+
+  clickUpdateContactInfo(){
+    this.updateContactInfoLink.click();
+  }
 }
 export default  new  AccountServicesMenuPage();

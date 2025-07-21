@@ -3,5 +3,6 @@
   "ACCOUNT_SUCCESSFULLY_CREATED_MSG": "Your account was created successfully. You are now logged in.",
   "ACCOUNT_OPENED_SUCCESS_MSG": "Congratulations, your account is now open.",
   "TRANSFER_COMFIRMATION": "Transfer Complete!",
-  "BILL_PAYMENT_CONFIRMATION": "Bill Payment Complete"
+  "BILL_PAYMENT_CONFIRMATION": "Bill Payment Complete",
+  "PROFILE_UPDATED_CONFIRMATION": "Profile Updated"
 }

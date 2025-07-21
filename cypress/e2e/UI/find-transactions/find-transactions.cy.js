@@ -3,16 +3,13 @@ import AccountServicesMenuPage from "../../../page-objects/account-services-menu
 import FindTransactionsPage from "../../../page-objects/find-transactions.page";
 
 describe("Find Transactions Functionality", () => {
-  let username, password;
   let amount = "50.00";
-let rows = "1"
+  let rows = "2";
 
   before(() => {
     cy.registerUserWithRetry(5);
 
     cy.get("@registeredUser").then((user) => {
-      username = user.username;
-      password = user.password;
       AccountServicesMenuPage.clickTransferFundsLink();
       TransferFundsPage.transferFunds({ amount, fromIndex: 0, toIndex: 0 });
     });
