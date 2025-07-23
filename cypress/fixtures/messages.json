@@ -4,5 +4,7 @@
   "ACCOUNT_OPENED_SUCCESS_MSG": "Congratulations, your account is now open.",
   "TRANSFER_COMFIRMATION": "Transfer Complete!",
   "BILL_PAYMENT_CONFIRMATION": "Bill Payment Complete",
-  "PROFILE_UPDATED_CONFIRMATION": "Profile Updated"
+  "PROFILE_UPDATED_CONFIRMATION": "Profile Updated",
+  "LOAN_REQUEST_PROCESSED_CONFIRMATION": "Loan Request Processed",
+  "LOAN_APPROVED_SUCCESSFULLY_MSG": "Congratulations, your loan has been approved."
 }

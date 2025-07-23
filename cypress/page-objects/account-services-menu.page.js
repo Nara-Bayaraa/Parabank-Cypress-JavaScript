@@ -53,8 +53,11 @@ get logoutButton() {
     this.findTransactionsLink.click();
   }
 
-  clickUpdateContactInfo(){
+  clickUpdateContactInfoLink(){
     this.updateContactInfoLink.click();
+  }
+  clickRequestLoanLink(){
+    this.requestLoanLink.click()
   }
 }
 export default  new  AccountServicesMenuPage();

@@ -13,7 +13,7 @@ describe("Update Contact Info Functionality", () => {
   beforeEach(() => {
     cy.registerUserWithRetry(5);
     cy.get("@registeredUser").then((user) => {
-      AccountServicesMenuPage.clickUpdateContactInfo();
+      AccountServicesMenuPage.clickUpdateContactInfoLink();
     });
   });
 
