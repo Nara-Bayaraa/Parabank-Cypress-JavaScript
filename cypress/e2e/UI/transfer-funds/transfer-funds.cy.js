@@ -5,25 +5,21 @@ import { parseValue } from "../../../support/helpers/data-formatters";
 
 describe("Account and Transfer Workflow", () => {
   let amount = "50.00";
-  let username, password;
+  let decimalAmount = "10.45";
+  let fractionalAmount = "0.10"
   let message;
-  before(() => {
-    cy.registerUser();
-    cy.get("@registeredUser").then((user) => {
-      username = user.username;
-      password = user.password;
-      cy.logoutUser();
-    });
-  });
+  let fromIndex = 0;
+  let toIndex = 1;
 
-  beforeEach(() => {
-    cy.loginUser(username, password);
-    cy.fixture("messages.json").then((data) => {
+  before(() => {
+    cy.fixture("ui-test-data/messages.json").then((data) => {
       message = data;
     });
   });
 
-  it(" [TRANSFER-001] Verify transferring money to existing account and sees a confirmation", () => {
+  it.only("[TRANSFER-001] Verify transferring money to existing account and sees a confirmation", () => {
+    cy.registerUserWithRetry(5);
+    cy.get("@registeredUser").then((user) => {});
     cy.selectAccountType("CHECKING");
     AccountServicesMenuPage.clickAccountOverviewLink();
     // Get initial balances for both accounts
@@ -71,12 +67,45 @@ describe("Account and Transfer Workflow", () => {
         //check total
         const finalDefaultBalance = parseValue(updatedDefault.balance);
         const finalCheckingBalance = parseValue(updatedChecking.balance);
-        const expectedTotal = "$" + (finalDefaultBalance + finalCheckingBalance).toFixed(2);
+        const expectedTotal =
+          "$" + (finalDefaultBalance + finalCheckingBalance).toFixed(2);
 
         AccountsOverviewPage.getTotalValue().then((actualTotal) => {
           expect(actualTotal).to.equal(expectedTotal);
         });
       });
+    });
+  });
+
+  it('[TRANSFER-002] Verify transferring decimal amount to existing account and sees a confirmation"', () => {
+    cy.uiLogin();
+    AccountServicesMenuPage.clickTransferFundsLink();
+    TransferFundsPage.transferFunds({
+      amount: decimalAmount,
+      fromIndex: fromIndex,
+      toIndex: toIndex,
+    });
+    TransferFundsPage.verifyTransferConfirmation({
+      expectedMessage: message.TRANSFER_COMFIRMATION,
+      enteringAmount: decimalAmount,
+      fromAccount: fromIndex,
+      toAccount: toIndex,
+    });
+  });
+
+  it('[TRANSFER-003] Verify transferring fractional amount to existing account and sees a confirmation"', () => {
+    cy.uiLogin();
+    AccountServicesMenuPage.clickTransferFundsLink();
+    TransferFundsPage.transferFunds({
+      amount: fractionalAmount,
+      fromIndex: fromIndex,
+      toIndex: toIndex,
+    });
+    TransferFundsPage.verifyTransferConfirmation({
+      expectedMessage: message.TRANSFER_COMFIRMATION,
+      enteringAmount: decimalAmount,
+      fromAccount: fromIndex,
+      toAccount: toIndex,
     });
   });
 });

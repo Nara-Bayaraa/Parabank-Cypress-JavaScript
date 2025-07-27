@@ -8,12 +8,12 @@ describe("Login Functionality - Negative Test Cases", () => {
   let userData;
 
   before(() => {
-    cy.fixture("user-credentials.json").then((data) => {
+    cy.fixture("ui-test-data/user-credentials.json").then((data) => {
       userData = data;
       validEmail = data.valid.username;
       validPassword = data.valid.password;
     });
-    cy.fixture("messages.json").then((data) => {
+    cy.fixture("ui-test-data/messages.json").then((data) => {
       errorMessage = data;
     });
   });

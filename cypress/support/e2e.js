@@ -14,7 +14,8 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import './commands'
+import './commands/commands';
+
 import 'cypress-xpath';
 import 'cypress-plugin-api';
 import 'cypress-wait-until';

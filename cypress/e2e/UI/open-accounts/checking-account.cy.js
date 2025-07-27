@@ -4,7 +4,6 @@ import AccountDetailsPage from "../../../page-objects/account-details.page";
 import OpenNewAccountPage from "../../../page-objects/open-new-account.page";
 
 describe("Open New Checking Account Functionality", () => {
-  
   let username, password;
   let message;
 

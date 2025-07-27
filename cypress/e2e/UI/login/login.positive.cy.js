@@ -1,20 +1,18 @@
 import HomePage from "../../../page-objects/home.page";
 
 describe("Login Functionality - Positive Test Cases", () => {
-
   let username;
   let password;
-  
-before(()=> {
 
-    cy.registerUserWithRetry(3);
-    
+  before(() => {
+    cy.registerUserWithRetry(5);
+
     cy.get("@registeredUser").then((user) => {
       username = user.username;
       password = user.password;
-       cy.logoutUser();
-})
-})
+      cy.logoutUser();
+    });
+  });
   beforeEach(() => {
     cy.visit("/");
   });
@@ -25,8 +23,7 @@ before(()=> {
     HomePage.typeUserName(username);
     HomePage.typePassword(password);
     HomePage.clickLoginButton();
-    HomePage.verifyAccountOverviewPageUrl()
+    HomePage.verifyAccountOverviewPageUrl();
     HomePage.verifyAccountOverviewPage();
   });
-  });
-
+});

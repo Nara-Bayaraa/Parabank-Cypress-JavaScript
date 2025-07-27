@@ -7,10 +7,10 @@ describe("User Registration - Negative Test Cases", () => {
   let userData;
 
   before(() => {
-    cy.fixture("error-messages.json").then((data) => {
+    cy.fixture("ui-test-data/error-messages.json").then((data) => {
       errorMessage = data;
     });
-    cy.fixture("user-credentials.json").then((data) => {
+    cy.fixture("ui-test-data/user-credentials.json").then((data) => {
       userData = data;
     });
   });

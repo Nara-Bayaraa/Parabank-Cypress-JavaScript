@@ -1,7 +1,6 @@
 import AccountsOverviewPage from "../../../page-objects/accounts-overview.page";
 
 describe("Open New Default Account Functionality", () => {
-
   let username, password;
 
   before(() => {

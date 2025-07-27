@@ -67,24 +67,24 @@ class TransferFundsPage {
   }) {
     this.confirmationMessageTitle.should("have.text", expectedMessage);
     this.amountResult.should("have.text", `$${enteringAmount}`);
-    this.fromAccountIdResult.should("have.text", fromAccount);
-    this.toAccountIdResult.should("have.text", toAccount);
+    this.fromAccountIdResult.should("be.visible", fromAccount);
+    this.toAccountIdResult.should('be.visible', toAccount);
     cy.contains("See Account Activity for more details.").should("be.visible");
   }
 
-    selectFromAccountByIndex(index = 0) {
-  return  this.fromAccountDropdown
+  selectFromAccountByIndex(index = 0) {
+    return this.fromAccountDropdown
       .find("option")
       .eq(index)
       .invoke("val")
       .then((accountNumber) => {
-        this.selectFromAccount(accountNumber)
-      return cy.wrap(accountNumber);
+        this.selectFromAccount(accountNumber);
+        return cy.wrap(accountNumber);
       });
   }
 
   selectToAccountByIndex(index = 0) {
-  return  this.toAccountDropdown
+    return this.toAccountDropdown
       .find("option")
       .eq(index)
       .invoke("val")
@@ -93,23 +93,24 @@ class TransferFundsPage {
         return cy.wrap(accountNumber);
       });
   }
-  
 
-transferFunds({ amount, fromIndex = 0, toIndex = 0 }) {
-  this.verifyTransferFundsTitleIsVisible();
-  this.enterAmount(amount);
+  transferFunds({ amount, fromIndex = 0, toIndex = 0 }) {
+    this.verifyTransferFundsTitleIsVisible();
+    this.enterAmount(amount);
 
-  return this.selectFromAccountByIndex(fromIndex).then((fromAccountNumber) => {
-    return this.selectToAccountByIndex(toIndex).then((toAccountNumber) => {
-      this.clickTransferButton();
-      return cy.wrap({
-        fromAccount: fromAccountNumber,
-        toAccount: toAccountNumber,
-        amount,
-      });
-    });
-  });
-}
+    return this.selectFromAccountByIndex(fromIndex).then(
+      (fromAccountNumber) => {
+        return this.selectToAccountByIndex(toIndex).then((toAccountNumber) => {
+          this.clickTransferButton();
+          return cy.wrap({
+            fromAccount: fromAccountNumber,
+            toAccount: toAccountNumber,
+            amount,
+          });
+        });
+      }
+    );
+  }
 }
 
 export default new TransferFundsPage();

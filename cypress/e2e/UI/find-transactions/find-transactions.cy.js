@@ -6,13 +6,11 @@ describe("Find Transactions Functionality", () => {
   let amount = "50.00";
   let rows = "2";
 
-  before(() => {
-    cy.registerUserWithRetry(5);
-
-    cy.get("@registeredUser").then((user) => {
+  beforeEach(() => {
+  cy.uiLogin();
       AccountServicesMenuPage.clickTransferFundsLink();
       TransferFundsPage.transferFunds({ amount, fromIndex: 0, toIndex: 0 });
-    });
+    
   });
 
   it("[TRANSACTIONS-001] Verify that searching by amount displays specified amount", () => {

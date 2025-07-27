@@ -10,8 +10,9 @@ describe("Request Loan Functionality", () => {
     cy.fixture("messages.json").then((data) => {
       message = data;
     });
-    cy.registerUserWithRetry(5);
-    cy.get("@registeredUser").then((user) => {});
+  });
+  beforeEach(() => {
+    cy.uiLogin();
   });
 
   it("[LOAN-001] Verify successfully submit a loan request with valid data", () => {

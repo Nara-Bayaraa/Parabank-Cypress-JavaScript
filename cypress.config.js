@@ -1,4 +1,4 @@
-const { defineConfig } = require('cypress');
+const { defineConfig } = require("cypress");
 
 module.exports = defineConfig({
   e2e: {
@@ -8,9 +8,12 @@ module.exports = defineConfig({
     pageLoadTimeout: 120000,
     viewportHeight: 1080,
     viewportWidth: 1920,
-    reporter: 'cypress-multi-reporters',
+    reporter: "cypress-multi-reporters",
     reporterOptions: {
-      configFile: 'reporter-config.json',
+      configFile: "reporter-config.json",
+    },
+    env: {
+      apiUrl: "https://parabank.parasoft.com/parabank/services/bank/",
     },
 
     setupNodeEvents(on, config) {

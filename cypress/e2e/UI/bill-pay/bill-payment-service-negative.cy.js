@@ -4,22 +4,14 @@ import { generateBillPaymentsData } from "../../../support/helpers/generate-data
 
 describe("Bill Payment Functionality Negative Test Cases", () => {
   let errorMessage;
-  let username, password;
-
+  
   before(() => {
-    cy.registerUser();
-    cy.get("@registeredUser").then((user) => {
-      username = user.username;
-      password = user.password;
-      cy.logoutUser();
-    });
-  });
-
-  beforeEach(() => {
-    cy.loginUser(username, password);
-    cy.fixture("error-messages.json").then((data) => {
+    cy.fixture("ui-test-data/error-messages.json").then((data) => {
       errorMessage = data;
     });
+  });
+  beforeEach(() => {
+    cy.uiLogin();
   });
 
   it("[PAYMENT-NEG-001] Should display validation errors when required fields are empty", () => {

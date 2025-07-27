@@ -5,22 +5,15 @@ import { generateBillPaymentsData } from "../../../support/helpers/generate-data
 describe("Bill Payment Functionality Positive Test Cases", () => {
   let fromAccount;
   let message;
-  let username, password;
 
   before(() => {
-    cy.registerUser();
-    cy.get("@registeredUser").then((user) => {
-      username = user.username;
-      password = user.password;
-      cy.logoutUser();
-    });
-  });
-
-  beforeEach(() => {
-    cy.loginUser(username, password);
-    cy.fixture("messages.json").then((data) => {
+    cy.fixture("ui-test-data/messages.json").then((data) => {
       message = data;
     });
+  });
+  
+  beforeEach(() => {
+    cy.uiLogin();
   });
 
   it("[PAYMENT-001] Verify paying bill to recipient account and sees a confirmation", () => {

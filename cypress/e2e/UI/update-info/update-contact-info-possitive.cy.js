@@ -5,16 +5,14 @@ describe("Update Contact Info Functionality", () => {
   let message;
 
   before(() => {
-    cy.fixture("messages.json").then((data) => {
+    cy.fixture("ui-test-data/messages.json").then((data) => {
       message = data;
     });
   });
 
   beforeEach(() => {
-    cy.registerUserWithRetry(5);
-    cy.get("@registeredUser").then((user) => {
-      AccountServicesMenuPage.clickUpdateContactInfoLink();
-    });
+    cy.uiLogin();
+    AccountServicesMenuPage.clickUpdateContactInfoLink();
   });
 
   it("[PROFILE-001] Should update contact info with valid data", () => {
@@ -32,7 +30,7 @@ describe("Update Contact Info Functionality", () => {
     UpdateContactInfoPage.clickUpdateProfileButton();
 
     UpdateContactInfoPage.verifyProfileUpdatedTextIsVisible(
-      message.PROFILE_UPDATED_CONFIRMATION 
+      message.PROFILE_UPDATED_CONFIRMATION
     );
   });
 });

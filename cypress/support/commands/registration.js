@@ -1,10 +1,5 @@
-import RegisterPage from "../page-objects/register.page";
-import HomePage from "../page-objects/home.page";
-import { generateUserRegistrationData } from "../support/helpers/generate-data";
-import AccountOpenedConfirmationPage from "../page-objects/account-opened-confirmation.page";
-import AccountServicesMenuPage from "../page-objects/account-services-menu.page";
-import OpenNewAccountPage from "../page-objects/open-new-account.page";
-import AccountDetailsPage from "../page-objects/account-details.page";
+import RegisterPage from "../../page-objects/register.page";
+import { generateUserRegistrationData } from "../helpers/generate-data";
 
 
 Cypress.Commands.add("registerUser", (overrides = {}) => {
@@ -26,37 +21,6 @@ Cypress.Commands.add("registerUser", (overrides = {}) => {
    
 });
 
-Cypress.Commands.add("loginUser", (username, password) => {
-//cy.visit("/index.htm");
-    cy.wait(1500);
-  HomePage.typeUserName(username);
-  HomePage.typePassword(password);
-  HomePage.clickLoginButton();
-      cy.log(`The logged username is: ${username}`);
-      cy.log(`The logged password is: ${password}`);
-});
-
-Cypress.Commands.add("logoutUser", () => {
-  cy.contains("Log Out").click();
-});
-
-Cypress.Commands.add('getAccountBalances', () => {
-  let balances = {};
-  cy.contains("Balance:").next().invoke("text").then(text => balances.balance = text.trim());
-  cy.contains("Available:").next().invoke("text").then(text => balances.available = text.trim());
-  cy.wrap(balances);
-});
-
-
-Cypress.Commands.add("selectAccountType", (accountType) => {
-  AccountServicesMenuPage.clickOpenNewAccountLink();
-  OpenNewAccountPage.selectAccountType(accountType);
-  AccountOpenedConfirmationPage.clickAccountNumberLink();
-cy.wait(1000)
-return AccountDetailsPage.getAccountNumber();
-});
-
-
 
 // retries logic on username conflict.
 Cypress.Commands.add('registerUserWithRetry', (maxRetries = 5) => {
@@ -77,7 +41,5 @@ Cypress.Commands.add('registerUserWithRetry', (maxRetries = 5) => {
     });
   }
   tryRegister();
+ 
 });
-
-import "./commands";
-
