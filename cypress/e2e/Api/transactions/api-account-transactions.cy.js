@@ -1,45 +1,38 @@
-describe("Accounts API - Transactions", () => {
-  const apiUrl = `${Cypress.env("apiUrl")}`;
-  const headers = { Accept: "application/json" };
+describe('Accounts API - Transactions', () => {
+  const apiUrl = `${Cypress.env('apiUrl')}`;
+  const headers = { Accept: 'application/json' };
 
-  context("GET /accounts/{accountId}/transactions", () => {
-    it("should return all transactions for a given account", () => {
+  context('GET /accounts/{accountId}/transactions', () => {
+    it('should return all transactions for a given account', () => {
       const accountId = 12345;
       cy.api({
-        method: "GET",
+        method: 'GET',
         url: `${apiUrl}/accounts/${accountId}/transactions`,
         headers,
         failOnStatusCode: false,
       }).then((response) => {
         expect(response.status).to.eq(200);
-        expect(response.body).to.be.an("array").and.not.be.empty;
+        expect(response.body).to.be.an('array').and.not.be.empty;
         expect(response.body.length).to.be.greaterThan(0);
 
         response.body.forEach((txn) => {
-          expect(txn).to.have.all.keys(
-            "id",
-            "accountId",
-            "type",
-            "date",
-            "amount",
-            "description"
-          );
+          expect(txn).to.have.all.keys('id', 'accountId', 'type', 'date', 'amount', 'description');
           expect(txn.accountId).to.eq(accountId);
-          expect(["Credit", "Debit"]).to.include(txn.type);
-          expect(txn.amount).to.be.a("number");
-          expect(txn.date).to.be.a("number");
-          expect(txn.description).to.be.a("string").and.not.be.empty;
+          expect(['Credit', 'Debit']).to.include(txn.type);
+          expect(txn.amount).to.be.a('number');
+          expect(txn.date).to.be.a('number');
+          expect(txn.description).to.be.a('string').and.not.be.empty;
         });
-        cy.log("Transactions:", JSON.stringify(response.body));
+        cy.log('Transactions:', JSON.stringify(response.body));
       });
     });
 
-    it("should return all transactions of a specific amount", () => {
+    it('should return all transactions of a specific amount', () => {
       const accountId = 12345;
       const amount = 100;
 
       cy.api({
-        method: "GET",
+        method: 'GET',
         url: `${apiUrl}/accounts/${accountId}/transactions/amount/${amount}`,
         headers,
         failOnStatusCode: false,
@@ -48,33 +41,23 @@ describe("Accounts API - Transactions", () => {
         expect(response.status).to.eq(200);
 
         response.body.forEach((txn) => {
-          expect(txn).to.have.all.keys(
-            "id",
-            "accountId",
-            "type",
-            "date",
-            "amount",
-            "description"
-          );
+          expect(txn).to.have.all.keys('id', 'accountId', 'type', 'date', 'amount', 'description');
           expect(txn.accountId).to.eq(accountId);
           expect(Number(txn.amount)).to.eq(amount);
-          expect(txn.type).to.be.oneOf(["Debit", "Credit"]);
-          expect(txn.date).to.be.a("number");
-          expect(txn.description).to.be.a("string").and.not.be.empty;
+          expect(txn.type).to.be.oneOf(['Debit', 'Credit']);
+          expect(txn.date).to.be.a('number');
+          expect(txn.description).to.be.a('string').and.not.be.empty;
         });
-        cy.log(
-          "Filtered Transactions By Amount:",
-          JSON.stringify(response.body)
-        );
+        cy.log('Filtered Transactions By Amount:', JSON.stringify(response.body));
       });
     });
 
-    it("should return all transactions of a specific month", () => {
+    it('should return all transactions of a specific month', () => {
       const accountId = 12678;
-      const month = "July";
-      const transactionType = "Debit";
+      const month = 'July';
+      const transactionType = 'Debit';
       cy.api({
-        method: "GET",
+        method: 'GET',
         url: `${apiUrl}/accounts/${accountId}/transactions/month/${month}/type/${transactionType}`,
         headers,
         failOnStatusCode: false,
@@ -83,36 +66,29 @@ describe("Accounts API - Transactions", () => {
         expect(response.body.length).to.be.greaterThan(0);
 
         response.body.forEach((txn) => {
-          expect(txn).to.have.all.keys(
-            "id",
-            "accountId",
-            "type",
-            "date",
-            "amount",
-            "description"
-          );
+          expect(txn).to.have.all.keys('id', 'accountId', 'type', 'date', 'amount', 'description');
           expect(new Date(txn.date).getMonth()).to.eq(6);
-          expect(txn.date).to.be.a("number");
+          expect(txn.date).to.be.a('number');
           expect(txn.accountId).to.eq(accountId);
           expect(txn.type).to.eq(transactionType);
-          expect(txn.description).to.be.a("string").and.not.be.empty;
+          expect(txn.description).to.be.a('string').and.not.be.empty;
         });
       });
     });
 
-    it("should return all transactions for the given account within the date range", () => {
+    it('should return all transactions for the given account within the date range', () => {
       const accountId = 12678;
-      const fromDate = "07-01-2025";
-      const toDate = "07-31-2025";
+      const fromDate = '07-01-2025';
+      const toDate = '07-31-2025';
       cy.api({
-        method: "GET",
+        method: 'GET',
         url: `${apiUrl}accounts/${accountId}/transactions/fromDate/${fromDate}/toDate/${toDate}`,
         headers,
         failOnStatusCode: false,
       }).then((response) => {
         expect(response.status).to.eq(200);
         expect(response.body.length).to.be.greaterThan(0);
-        expect(response.body).to.be.an("array");
+        expect(response.body).to.be.an('array');
         response.body.forEach((txn) => {
           expect(txn.accountId).to.eq(accountId);
           const txnDate = new Date(txn.date);
@@ -122,19 +98,19 @@ describe("Accounts API - Transactions", () => {
       });
     });
 
-    it("should return all transactions on a specific date for account", () => {
+    it('should return all transactions on a specific date for account', () => {
       const accountId = 12345;
-      const onDate = "07-17-2025";
+      const onDate = '07-17-2025';
 
       cy.api({
-        method: "GET",
+        method: 'GET',
         url: `${apiUrl}accounts/${accountId}/transactions/onDate/${onDate}`,
         headers,
         failOnStatusCode: false,
       }).then((response) => {
         expect(response.status).to.eq(200);
         expect(response.body.length).to.be.greaterThan(0);
-        expect(response.body).to.be.an("array");
+        expect(response.body).to.be.an('array');
 
         const expectedDate = new Date(onDate);
         response.body.forEach((txn) => {
@@ -147,8 +123,8 @@ describe("Accounts API - Transactions", () => {
     });
   });
 
-  context("POST /transfer", () => {
-    it("should successfully transfer funds", () => {
+  context('POST /transfer', () => {
+    it('should successfully transfer funds', () => {
       const testData = {
         fromAccountId: 12678,
         toAccountId: 12345,
@@ -156,7 +132,7 @@ describe("Accounts API - Transactions", () => {
       };
 
       cy.api({
-        method: "POST",
+        method: 'POST',
         url: `${apiUrl}/transfer`,
         qs: testData,
         headers,
@@ -170,22 +146,21 @@ describe("Accounts API - Transactions", () => {
     });
   });
 
-  context("POST /withdraw", () => {
-    it.only("should successfully withdraw funds", () => {
+  context('POST /withdraw', () => {
+    it.only('should successfully withdraw funds', () => {
       const testData = {
         accountId: 12678,
         amount: 50,
       };
 
       cy.api({
-        method: "POST",
+        method: 'POST',
         url: `${apiUrl}/withdraw`,
         qs: testData,
         headers,
         failOnStatusCode: false,
       }).then((response) => {
         expect(response.status).to.eq(200);
-        expect(response.body.status === 'success')
         expect(response.body).to.include(
           `Successfully withdrew $${testData.amount} from account #${testData.accountId}`
         );

@@ -1,16 +1,16 @@
-describe("Deposit API", () => {
-   const apiUrl = `${Cypress.env("apiUrl")}`;
-    const headers = { Accept: "application/json" };
+describe('Deposit API', () => {
+  const apiUrl = `${Cypress.env('apiUrl')}`;
+  const headers = { Accept: 'application/json' };
 
-  context("POST /deposit", () => {
-   const testData = {
+  context('POST /deposit', () => {
+    const testData = {
       accountId: 12345,
       amount: 50,
     };
 
-    it("should successfully deposit funds into an existing account", () => {
+    it('should successfully deposit funds into an existing account', () => {
       cy.api({
-        method: "POST",
+        method: 'POST',
         url: `${apiUrl}/deposit`,
         qs: testData,
         headers,
@@ -23,11 +23,11 @@ describe("Deposit API", () => {
       });
     });
 
-    it("should return 404 for invalid account", () => {
+    it('should return 404 for invalid account', () => {
       cy.api({
-        method: "POST",
+        method: 'POST',
         url: `${apiUrl}/deposit`,
-        qs: { accountId: "invalid", amount: 50 },
+        qs: { accountId: 'invalid', amount: 50 },
         headers,
         failOnStatusCode: false,
       }).then((response) => {
@@ -35,6 +35,5 @@ describe("Deposit API", () => {
         expect(response.body).to.be.empty;
       });
     });
-  }); 
   });
-
+});
