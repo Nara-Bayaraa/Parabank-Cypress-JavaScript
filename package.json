@@ -12,6 +12,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "ajv": "^8.17.1",
     "cypress": "^14.4.1",
     "cypress-plugin-api": "^2.11.2",
     "cypress-wait-until": "^3.0.2",

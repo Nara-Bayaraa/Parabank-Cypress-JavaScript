@@ -1,7 +1,18 @@
 import HomePage from "../../page-objects/home.page";
 
+// UI login with session caching
+Cypress.Commands.add('uiLogin', (username = 'john', password = 'demo') => {
+  cy.session([username, password], () => {
+      cy.visit("/index.htm");
+    HomePage.typeUserName(username);
+    HomePage.typePassword(password); 
+    HomePage.clickLoginButton();
+});
+});
+
+
 Cypress.Commands.add("loginUser", (username, password) => {
-  //cy.visit("/index.htm");
+  cy.visit("/index.htm");
   cy.wait(1500);
   HomePage.typeUserName(username);
   HomePage.typePassword(password);
@@ -10,30 +21,19 @@ Cypress.Commands.add("loginUser", (username, password) => {
   cy.log(`The logged password is: ${password}`);
 });
 
-Cypress.Commands.add("logoutUser", () => {
-  cy.contains("Log Out").click();
+Cypress.Commands.add('logoutUser', () => {
+  cy.contains('Log Out').should('be.visible').click();
 });
 
-
-Cypress.Commands.add("apiLogin", (username = "john", password = "demo") => {
-  cy.request({
-    method: "POST",
-    url: "https://parabank.parasoft.com/parabank/login.htm",
+// API login 
+Cypress.Commands.add('apiLogin', (username = 'john', password = 'demo') => {
+  cy.api({
+    method: 'POST',
+    url: '/login.htm',
     form: true,
-    body: {
-      username,
-      password,
-    },
-  }).then((response) => {
-    expect(response.status).to.eq(200);
-    cy.log(`Logged in as ${username}`);
+    body: { username, password },
+  }).then(({ status }) => {
+    expect(status).to.eq(200);
   });
 });
 
-
-Cypress.Commands.add("uiLogin", (username = "john", password = "demo") => {
-  cy.visit("/index.htm");
-  cy.get('input[name="username"]').clear().type(username);
-  cy.get('input[name="password"]').clear().type(password);
-  cy.get('input[type="submit"]').click();
-});

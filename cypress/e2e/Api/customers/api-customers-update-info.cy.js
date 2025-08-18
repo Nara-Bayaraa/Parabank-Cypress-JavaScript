@@ -1,26 +1,28 @@
+import { faker } from '@faker-js/faker';
 describe("Customer Update API", () => {
   const apiUrl = Cypress.env("apiUrl");
   const headers = { Accept: "application/json" };
   const customerId = 12212;
+  
   context("POST /customers/update/{customerId}", () => {
     const updateData = {
-      firstName: "Jen",
-      lastName: "Doe",
-      street: "555 Cypress Ave",
-      city: "Testville",
-      state: "TX",
-      zipCode: "75001",
-      phoneNumber: "123-456-7890",
-      ssn: "123-45-6789",
-      username: "jendoe",
-      password: "newpass123",
+      firstName: faker.person.firstName(),
+      lastName: faker.person.lastName(),
+      street: faker.location.streetAddress(),
+      city: faker.location.city(),
+      state: 'TX',
+      zipCode: faker.location.zipCode('#####'),
+      phoneNumber: '123-456-7890',
+      ssn: '123-45-6789',
+      username: `qa_${faker.string.alphanumeric(8)}`,
+      password: 'newpass123',
     };
     
     it("should update all fields by customer ID and return success", () => {
       cy.api({
         method: "POST",
         url: `${apiUrl}/customers/update/${customerId}`,
-        qs: { ...updateData },
+        qs: updateData,
         headers,
         failOnStatusCode: false,
       }).then((response) => {
@@ -43,5 +45,17 @@ describe("Customer Update API", () => {
     });
   });
 
-  context("Negative cases", () => {});
+  context("Negative cases", () => {
+  it('should returns error for unknown customer', () => {
+    cy.api({
+      method: 'POST',
+      url: `${apiUrl}/customers/update/99999999`,
+      qs: { firstName: 'X' },
+      headers,
+      failOnStatusCode: false,
+    }).then(({ status }) => {
+      expect([400, 404, 500]).to.include(status);
+    });
+  });
+  });
 });

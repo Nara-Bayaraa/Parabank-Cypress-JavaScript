@@ -16,6 +16,7 @@ describe('Accounts API', () => {
       });
     });
 });
+
      context('Negative Test Cases', () => {
     it('should return an error for invalid account ID', () => {
       const invalidAccountId = 999999;
