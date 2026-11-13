@@ -1,26 +1,26 @@
-import TransferFundsPage from "../../../page-objects/transfer-funds.page";
-import AccountsOverviewPage from "../../../page-objects/accounts-overview.page";
-import AccountServicesMenuPage from "../../../page-objects/account-services-menu.page";
-import { parseValue } from "../../../support/helpers/data-formatters";
+import AccountServicesMenuPage from '../../../page-objects/account-services-menu.page';
+import AccountsOverviewPage from '../../../page-objects/accounts-overview.page';
+import TransferFundsPage from '../../../page-objects/transfer-funds.page';
+import { parseValue } from '../../../support/helpers/data-formatters';
 
-describe("Account and Transfer Workflow", () => {
-  let amount = "50.00";
-  let decimalAmount = "10.45";
-  let fractionalAmount = "0.10"
+describe('Account and Transfer Workflow', () => {
+  let amount = '50.00';
+  let decimalAmount = '10.45';
+  let fractionalAmount = '0.10';
   let message;
   let fromIndex = 0;
   let toIndex = 1;
 
   before(() => {
-    cy.fixture("ui-test-data/messages.json").then((data) => {
+    cy.fixture('ui-test-data/messages.json').then((data) => {
       message = data;
     });
   });
 
-  it.only("[TRANSFER-001] Verify transferring money to existing account and sees a confirmation", () => {
+  it('[TRANSFER-001] Verify transferring money to existing account and sees a confirmation', () => {
     cy.registerUserWithRetry(5);
-    cy.get("@registeredUser").then((user) => {});
-    cy.selectAccountType("CHECKING");
+    cy.get('@registeredUser').then((user) => {});
+    cy.selectAccountType('CHECKING');
     AccountServicesMenuPage.clickAccountOverviewLink();
     // Get initial balances for both accounts
     AccountsOverviewPage.getAllAccounts().then((accountsBefore) => {
@@ -57,18 +57,13 @@ describe("Account and Transfer Workflow", () => {
           checkingAccountNum
         );
 
-        expect(parseValue(updatedDefault.balance)).to.eq(
-          initialDefaultBalance - Number(amount)
-        );
-        expect(parseValue(updatedChecking.balance)).to.eq(
-          initialCheckingBalance + Number(amount)
-        );
+        expect(parseValue(updatedDefault.balance)).to.eq(initialDefaultBalance - Number(amount));
+        expect(parseValue(updatedChecking.balance)).to.eq(initialCheckingBalance + Number(amount));
 
         //check total
         const finalDefaultBalance = parseValue(updatedDefault.balance);
         const finalCheckingBalance = parseValue(updatedChecking.balance);
-        const expectedTotal =
-          "$" + (finalDefaultBalance + finalCheckingBalance).toFixed(2);
+        const expectedTotal = '$' + (finalDefaultBalance + finalCheckingBalance).toFixed(2);
 
         AccountsOverviewPage.getTotalValue().then((actualTotal) => {
           expect(actualTotal).to.equal(expectedTotal);
@@ -103,7 +98,7 @@ describe("Account and Transfer Workflow", () => {
     });
     TransferFundsPage.verifyTransferConfirmation({
       expectedMessage: message.TRANSFER_COMFIRMATION,
-      enteringAmount: decimalAmount,
+      enteringAmount: fractionalAmount,
       fromAccount: fromIndex,
       toAccount: toIndex,
     });
