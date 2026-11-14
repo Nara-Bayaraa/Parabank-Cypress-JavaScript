@@ -1,22 +1,21 @@
-import RegisterPage from "../../../page-objects/register.page";
-import HomePage from "../../../page-objects/home.page";
-import { generateUserRegistrationData } from "../../../support/helpers/generate-data";
+import HomePage from '../../../page-objects/home.page';
+import RegisterPage from '../../../page-objects/register.page';
+import { generateUserRegistrationData } from '../../../support/helpers/generate-data';
 
-describe("User Registration -Positive Test Cases", () => {
-
+describe('User Registration -Positive Test Cases', () => {
   let successMessage;
 
   before(() => {
-    cy.fixture("messages.json").then((data) => {
+    cy.fixture('ui-test-data/messages.json').then((data) => {
       successMessage = data;
     });
   });
 
   beforeEach(() => {
-    cy.visit("/");
+    cy.visit('/');
   });
 
-  it("[REG-001] should register a new user", () => {
+  it('[REG-001] should register a new user', () => {
     const registerData = generateUserRegistrationData();
     HomePage.clickRegisterLink();
     RegisterPage.typeFirstName(registerData.firstName);
@@ -31,13 +30,11 @@ describe("User Registration -Positive Test Cases", () => {
     RegisterPage.typePassword(registerData.password);
     RegisterPage.typeConfirmPassword(registerData.confirmPassword);
     RegisterPage.clickRegisterButton();
-    RegisterPage.verifyWelcomeMessageIsVisible(
-      successMessage.WELCOME_MSG
-    );
+    RegisterPage.verifyWelcomeMessageIsVisible(successMessage.WELCOME_MSG);
     RegisterPage.verifyAccountSuccessfullyCreatedMessageIsVisible(
       successMessage.ACCOUNT_SUCCESSFULLY_CREATED_MSG
     );
-        cy.log(`username ${registerData.username}`);
-        cy.log(`password ${registerData.password}`);
+    cy.log(`username ${registerData.username}`);
+    cy.log(`password ${registerData.password}`);
   });
 });
