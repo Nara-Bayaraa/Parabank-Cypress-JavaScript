@@ -124,6 +124,7 @@ describe('Accounts API - Transactions', () => {
   });
 
   context('POST /transfer', () => {
+    
     it('should successfully transfer funds', () => {
       const testData = {
         fromAccountId: 12678,
@@ -147,7 +148,8 @@ describe('Accounts API - Transactions', () => {
   });
 
   context('POST /withdraw', () => {
-    it.only('should successfully withdraw funds', () => {
+
+    it('should successfully withdraw funds', () => {
       const testData = {
         accountId: 12678,
         amount: 50,
