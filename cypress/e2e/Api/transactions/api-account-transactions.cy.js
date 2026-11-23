@@ -1,5 +1,6 @@
 describe('Accounts API - Transactions', () => {
-  const apiUrl = `${Cypress.env('apiUrl')}`;
+  // Drop a trailing '/' so every path below can start with '/' without making '//'.
+  const apiUrl = Cypress.env('apiUrl').replace(/\/$/, '');
   // ParaBank answers in XML unless asked for JSON, and every assertion below reads JSON.
   const headers = { Accept: 'application/json' };
   // ParaBank's date endpoints only accept MM-DD-YYYY in the URL.
@@ -7,7 +8,6 @@ describe('Accounts API - Transactions', () => {
     `${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}-${date.getFullYear()}`;
 
   context('GET /accounts/{accountId}/transactions', () => {
-    
     it('should return all transactions for a given account', () => {
       const accountId = 12345;
       // failOnStatusCode: false lets our assertion report the real status code
@@ -43,8 +43,8 @@ describe('Accounts API - Transactions', () => {
         headers,
         failOnStatusCode: false,
       }).then((response) => {
-        expect(response.body.length).to.be.greaterThan(0);
         expect(response.status).to.eq(200);
+        expect(response.body.length).to.be.greaterThan(0);
 
         response.body.forEach((txn) => {
           expect(txn).to.have.all.keys('id', 'accountId', 'type', 'date', 'amount', 'description');
@@ -83,9 +83,9 @@ describe('Accounts API - Transactions', () => {
 
         response.body.forEach((txn) => {
           expect(txn).to.have.all.keys('id', 'accountId', 'type', 'date', 'amount', 'description');
+          expect(txn.date).to.be.a('number');
           // ParaBank stores the date as midnight UTC, so read its month in UTC too.
           expect(new Date(txn.date).getUTCMonth()).to.eq(new Date().getMonth());
-          expect(txn.date).to.be.a('number');
           expect(txn.accountId).to.eq(accountId);
           expect(txn.type).to.eq(transactionType);
           expect(txn.description).to.be.a('string').and.not.be.empty;
@@ -110,20 +110,20 @@ describe('Accounts API - Transactions', () => {
 
       cy.api({
         method: 'GET',
-        url: `${apiUrl}accounts/${accountId}/transactions/fromDate/${fromDate}/toDate/${toDate}`,
+        url: `${apiUrl}/accounts/${accountId}/transactions/fromDate/${fromDate}/toDate/${toDate}`,
         headers,
         failOnStatusCode: false,
       }).then((response) => {
         expect(response.status).to.eq(200);
         expect(response.body).to.be.an('array').and.not.be.empty;
 
-        const rangeStart = new Date(weekAgo.getFullYear(), weekAgo.getMonth(), weekAgo.getDate());
-        // End at midnight starting the day after toDate, so transactions later today still count.
-        const rangeEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+        // Bounds are UTC midnight to match how ParaBank stores dates. End is the day after toDate.
+        const rangeStart = Date.UTC(weekAgo.getFullYear(), weekAgo.getMonth(), weekAgo.getDate());
+        const rangeEnd = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate() + 1);
 
         response.body.forEach((txn) => {
           expect(txn.accountId).to.eq(accountId);
-          expect(txn.date).to.be.at.least(rangeStart.getTime()).and.below(rangeEnd.getTime());
+          expect(txn.date).to.be.at.least(rangeStart).and.below(rangeEnd);
         });
       });
     });
@@ -142,7 +142,7 @@ describe('Accounts API - Transactions', () => {
 
       cy.api({
         method: 'GET',
-        url: `${apiUrl}accounts/${accountId}/transactions/onDate/${onDate}`,
+        url: `${apiUrl}/accounts/${accountId}/transactions/onDate/${onDate}`,
         headers,
         failOnStatusCode: false,
       }).then((response) => {
