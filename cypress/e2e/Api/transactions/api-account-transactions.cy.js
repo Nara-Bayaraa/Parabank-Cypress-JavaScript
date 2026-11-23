@@ -1,10 +1,17 @@
 describe('Accounts API - Transactions', () => {
   const apiUrl = `${Cypress.env('apiUrl')}`;
+  // ParaBank answers in XML unless asked for JSON, and every assertion below reads JSON.
   const headers = { Accept: 'application/json' };
+  // ParaBank's date endpoints only accept MM-DD-YYYY in the URL.
+  const formatDate = (date) =>
+    `${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}-${date.getFullYear()}`;
 
   context('GET /accounts/{accountId}/transactions', () => {
+    
     it('should return all transactions for a given account', () => {
       const accountId = 12345;
+      // failOnStatusCode: false lets our assertion report the real status code
+      // instead of Cypress stopping with a generic request error.
       cy.api({
         method: 'GET',
         url: `${apiUrl}/accounts/${accountId}/transactions`,
@@ -13,7 +20,6 @@ describe('Accounts API - Transactions', () => {
       }).then((response) => {
         expect(response.status).to.eq(200);
         expect(response.body).to.be.an('array').and.not.be.empty;
-        expect(response.body.length).to.be.greaterThan(0);
 
         response.body.forEach((txn) => {
           expect(txn).to.have.all.keys('id', 'accountId', 'type', 'date', 'amount', 'description');
@@ -54,8 +60,18 @@ describe('Accounts API - Transactions', () => {
 
     it('should return all transactions of a specific month', () => {
       const accountId = 12678;
-      const month = 'July';
+      const month = new Date().toLocaleString('en-US', { month: 'long' });
       const transactionType = 'Debit';
+
+      // Setup: makes a Debit today so the month query always has data.
+      // No failOnStatusCode here on purpose. If setup fails, the test should stop right away.
+      cy.api({
+        method: 'POST',
+        url: `${apiUrl}/transfer`,
+        qs: { fromAccountId: accountId, toAccountId: 12345, amount: 5 },
+        headers,
+      });
+
       cy.api({
         method: 'GET',
         url: `${apiUrl}/accounts/${accountId}/transactions/month/${month}/type/${transactionType}`,
@@ -67,7 +83,7 @@ describe('Accounts API - Transactions', () => {
 
         response.body.forEach((txn) => {
           expect(txn).to.have.all.keys('id', 'accountId', 'type', 'date', 'amount', 'description');
-          expect(new Date(txn.date).getMonth()).to.eq(6);
+          expect(new Date(txn.date).getMonth()).to.eq(new Date().getMonth());
           expect(txn.date).to.be.a('number');
           expect(txn.accountId).to.eq(accountId);
           expect(txn.type).to.eq(transactionType);
@@ -78,8 +94,19 @@ describe('Accounts API - Transactions', () => {
 
     it('should return all transactions for the given account within the date range', () => {
       const accountId = 12678;
-      const fromDate = '07-01-2025';
-      const toDate = '07-31-2025';
+      const today = new Date();
+      const weekAgo = new Date();
+      weekAgo.setDate(weekAgo.getDate() - 7);
+      const fromDate = formatDate(weekAgo);
+      const toDate = formatDate(today);
+
+      cy.api({
+        method: 'POST',
+        url: `${apiUrl}/transfer`,
+        qs: { fromAccountId: accountId, toAccountId: 12345, amount: 5 },
+        headers,
+      });
+
       cy.api({
         method: 'GET',
         url: `${apiUrl}accounts/${accountId}/transactions/fromDate/${fromDate}/toDate/${toDate}`,
@@ -87,17 +114,20 @@ describe('Accounts API - Transactions', () => {
         failOnStatusCode: false,
       }).then((response) => {
         expect(response.status).to.eq(200);
-        expect(response.body.length).to.be.greaterThan(0);
-        expect(response.body).to.be.an('array');
+        expect(response.body).to.be.an('array').and.not.be.empty;
+
+        const rangeStart = new Date(weekAgo.getFullYear(), weekAgo.getMonth(), weekAgo.getDate());
+        // End at midnight starting the day after toDate, so transactions later today still count.
+        const rangeEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+
         response.body.forEach((txn) => {
           expect(txn.accountId).to.eq(accountId);
-          const txnDate = new Date(txn.date);
-          expect(txnDate >= new Date(fromDate)).to.be.true;
-          expect(txnDate <= new Date(toDate)).to.be.true;
+          expect(txn.date).to.be.at.least(rangeStart.getTime()).and.below(rangeEnd.getTime());
         });
       });
     });
 
+    // TODO: hardcoded July 2025 date. Same problem as the date range test.
     it('should return all transactions on a specific date for account', () => {
       const accountId = 12345;
       const onDate = '07-17-2025';
@@ -124,7 +154,6 @@ describe('Accounts API - Transactions', () => {
   });
 
   context('POST /transfer', () => {
-    
     it('should successfully transfer funds', () => {
       const testData = {
         fromAccountId: 12678,
@@ -148,7 +177,6 @@ describe('Accounts API - Transactions', () => {
   });
 
   context('POST /withdraw', () => {
-
     it('should successfully withdraw funds', () => {
       const testData = {
         accountId: 12678,
