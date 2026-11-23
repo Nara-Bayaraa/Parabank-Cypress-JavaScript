@@ -83,7 +83,8 @@ describe('Accounts API - Transactions', () => {
 
         response.body.forEach((txn) => {
           expect(txn).to.have.all.keys('id', 'accountId', 'type', 'date', 'amount', 'description');
-          expect(new Date(txn.date).getMonth()).to.eq(new Date().getMonth());
+          // ParaBank stores the date as midnight UTC, so read its month in UTC too.
+          expect(new Date(txn.date).getUTCMonth()).to.eq(new Date().getMonth());
           expect(txn.date).to.be.a('number');
           expect(txn.accountId).to.eq(accountId);
           expect(txn.type).to.eq(transactionType);
