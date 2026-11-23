@@ -13,7 +13,7 @@ describe("Login Functionality - Negative Test Cases", () => {
       validEmail = data.valid.username;
       validPassword = data.valid.password;
     });
-    cy.fixture("ui-test-data/messages.json").then((data) => {
+    cy.fixture("ui-test-data/error-messages.json").then((data) => {
       errorMessage = data;
     });
   });
