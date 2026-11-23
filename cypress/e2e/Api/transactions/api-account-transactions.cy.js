@@ -127,10 +127,17 @@ describe('Accounts API - Transactions', () => {
       });
     });
 
-    // TODO: hardcoded July 2025 date. Same problem as the date range test.
     it('should return all transactions on a specific date for account', () => {
-      const accountId = 12345;
-      const onDate = '07-17-2025';
+      const accountId = 12678;
+      const today = new Date();
+      const onDate = formatDate(today);
+
+      cy.api({
+        method: 'POST',
+        url: `${apiUrl}/transfer`,
+        qs: { fromAccountId: accountId, toAccountId: 12345, amount: 5 },
+        headers,
+      });
 
       cy.api({
         method: 'GET',
@@ -139,15 +146,14 @@ describe('Accounts API - Transactions', () => {
         failOnStatusCode: false,
       }).then((response) => {
         expect(response.status).to.eq(200);
-        expect(response.body.length).to.be.greaterThan(0);
-        expect(response.body).to.be.an('array');
+        expect(response.body).to.be.an('array').and.not.be.empty;
 
-        const expectedDate = new Date(onDate);
+        // ParaBank stores only the date, as midnight UTC, not the real time of the transaction.
+        const expectedDate = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate());
+
         response.body.forEach((txn) => {
-          const txnDate = new Date(txn.date);
           expect(txn.accountId).to.eq(accountId);
-          expect(txnDate.getFullYear()).to.eq(expectedDate.getFullYear());
-          expect(txnDate.getMonth()).to.eq(expectedDate.getMonth());
+          expect(txn.date).to.eq(expectedDate);
         });
       });
     });
