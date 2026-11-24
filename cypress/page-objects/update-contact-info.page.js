@@ -47,7 +47,7 @@ class UpdateContactInfoPage {
   }
 
   verifyProfileUpdatedTextIsVisible(expectedText) {
-    this.profileUpdatedText.should("be.visible", expectedText);
+    this.profileUpdatedText.should("be.visible").and("contain.text", expectedText);
   }
 }
 export default new UpdateContactInfoPage();
