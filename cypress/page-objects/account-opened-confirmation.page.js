@@ -21,7 +21,7 @@ class AccountOpenedConfirmationPage {
   }
 
   verifyAccountOpenMessage(expectedMessage) {
-    this.congratulationsText.should("be.visible", expectedMessage);
+    this.congratulationsText.should("be.visible").and("contain.text", expectedMessage);
   }
 
   verifyAccountNumberLink() {
