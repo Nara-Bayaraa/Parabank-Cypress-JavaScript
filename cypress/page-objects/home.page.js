@@ -47,8 +47,8 @@ class HomePage {
     this.loginButton.click();
   }
 
-  verifyCredentialsErrorMessageIsVisible() {
-    this.credentialsRequiredErrorText.should("be.visible");
+  verifyCredentialsErrorMessageIsVisible(expectedMessage) {
+    this.credentialsRequiredErrorText.should("be.visible").and("contain.text", expectedMessage);
   }
 }
 export default new HomePage();
