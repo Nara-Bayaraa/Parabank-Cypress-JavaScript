@@ -8,6 +8,7 @@ Cypress.Commands.add('uiLogin', (username = 'john', password = 'demo') => {
     HomePage.typePassword(password); 
     HomePage.clickLoginButton();
 });
+  cy.visit("/overview.htm");
 });
 
 
