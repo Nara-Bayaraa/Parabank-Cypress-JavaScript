@@ -32,7 +32,8 @@ class AccountsOverviewPage {
 
   verifyDefaultAccountNumber(expectedDefaultNumber) {
     this.accountNumber
-      .should("be.visible", expectedDefaultNumber)
+      .should("be.visible")
+      .and("contain.text", expectedDefaultNumber)
       .and("have.attr", "href")
       .and("match", /activity\.htm\?id=\d+/);
   }
