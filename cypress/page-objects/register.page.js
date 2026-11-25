@@ -151,7 +151,7 @@ get allRegisterFieldsErrorMessages() {return cy.get('[class="error"]')}
   }
 
   verifyUserAlreadyExistMessageIsVisible(expectedMessage) {
-    this.usernameExistErrorText.should("be.visible", expectedMessage);
+    this.usernameExistErrorText.should("be.visible").and("contain.text", expectedMessage);
   }
 
   verifyFirstNameRequiredMessageIsVisible() {
