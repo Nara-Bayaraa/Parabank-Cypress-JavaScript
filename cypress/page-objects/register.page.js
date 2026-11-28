@@ -163,7 +163,7 @@ get allRegisterFieldsErrorMessages() {return cy.get('[class="error"]')}
   }
 
     verifyWelcomeMessageIsVisible(expectedText) {
-    this.welcomeText.should("be.visible", expectedText);
+    this.welcomeText.should("be.visible").and("contain.text", expectedText);
   }
 
   verifyAccountSuccessfullyCreatedMessageIsVisible(expectedText) {
