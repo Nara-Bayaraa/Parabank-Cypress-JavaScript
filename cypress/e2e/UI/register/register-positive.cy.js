@@ -30,7 +30,7 @@ describe('User Registration -Positive Test Cases', () => {
     RegisterPage.typePassword(registerData.password);
     RegisterPage.typeConfirmPassword(registerData.confirmPassword);
     RegisterPage.clickRegisterButton();
-    RegisterPage.verifyWelcomeMessageIsVisible(successMessage.WELCOME_MSG);
+    RegisterPage.verifyWelcomeMessageIsVisible(successMessage.WELCOME_MSG.replace('{username}', registerData.username));
     RegisterPage.verifyAccountSuccessfullyCreatedMessageIsVisible(
       successMessage.ACCOUNT_SUCCESSFULLY_CREATED_MSG
     );
